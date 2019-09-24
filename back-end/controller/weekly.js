@@ -13,7 +13,7 @@ const conn = mysql.createConnection(models.mysql);
 conn.connect();
 const jsonWrite = function(res, ret) {
     if(typeof ret === 'undefined') {
-        res.send('erro')
+        res.send('err')
     } else {
         res.json(ret);
         // res.send('ok')
@@ -49,7 +49,8 @@ router.post('/logIn', (req,res) => {
     }else{
       let resultData = result[0]
        /**设置移动端登录连续30分钟过后过期**/
-      let expires = moment().add(1, 'minutes').valueOf();
+      // let expires = moment().add(30, 'minutes').valueOf();
+      let expires = moment().add(20, 'seconds').valueOf();
       let token = jwt.encode({
         iss: result.id,
         exp: expires,
@@ -86,17 +87,12 @@ router.post('/queryWeeklyList', (req,res) => {
   let token=req.headers.token //获取前端请求头发送过来的token
   let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
   if (decoded.exp <= Date.now()) {
-    let unlogin = {
+    let resultParams = {
         code: 20,
         message: '登录过期'
     }
-    jsonWrite(unlogin)
+    res.json(resultParams)
   } else {
-    /*let resultParams = {
-        code: 2,
-        message: '查询有误'
-    }
-    jsonWrite(res, resultParams)*/
     let params = req.body
     let adminId = params.adminId
     if(!adminId){
@@ -104,7 +100,7 @@ router.post('/queryWeeklyList', (req,res) => {
           code: 20,
           message: 'adminId参数有误'
       }
-      jsonWrite(res, resultParams)
+      res.json(resultParams)
     }else{
       let selectWeeklyList = $sql.weekly.selectWeeklyList
       // let keywords = req.body.keywords
