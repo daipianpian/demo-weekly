@@ -26,56 +26,62 @@ router.post('/logIn', (req,res) => {
   let params = req.body
   let name = params.name
   let password = params.password
-  let objParams = [name, password]
-
-  let selectUser = $sql.user.selectUser
-
-  conn.query(selectUser, objParams, function(err, result) {
-    let resultParams = {}
-    if(err) {
-      resultParams = {
-          code: -2,
-          message: '查询失败',
-          errMessage: err
-      }
+  if(!name || !password){
+    let resultParams = {
+        code: 20,
+        message: '用户名或者密码错误'
     }
+    res.json(resultParams)
+  }else{
+    let objParams = [name, password]
 
-    if(result.length === 0) {
-      resultParams = {
-          code: 2,
-          data: {},
-          message: '用户或密码不正确'
-      }
-    }else{
-      let resultData = result[0]
-       /**设置移动端登录连续30分钟过后过期**/
-      // let expires = moment().add(30, 'minutes').valueOf();
-      let expires = moment().add(20, 'seconds').valueOf();
-      let token = jwt.encode({
-        iss: result.id,
-        exp: expires,
-      }, app.get('jwtTokenSecret'));
+    let selectUser = $sql.user.selectUser
 
-      resultParams = {
-          code: 1,
-          data: {
-            id: resultData.id,
-            name: resultData.name,
-            email: resultData.email,
-            type: resultData.type,
-            state: resultData.state,
-            token: token
-          },
-          message: '登陆成功'
+    conn.query(selectUser, objParams, function(err, result) {
+      let resultParams = {}
+      if(err) {
+        resultParams = {
+            code: -2,
+            message: '查询失败',
+            errMessage: err
+        }
       }
 
-    }
+      if(result.length === 0) {
+        resultParams = {
+            code: 2,
+            data: {},
+            message: '用户或密码不正确'
+        }
+      }else{
+        let resultData = result[0]
+         /**设置移动端登录连续30分钟过后过期**/
+        let expires = moment().add(30, 'minutes').valueOf();
+        // let expires = moment().add(20, 'seconds').valueOf();
+        let token = jwt.encode({
+          iss: result.id,
+          exp: expires,
+        }, app.get('jwtTokenSecret'));
+
+        resultParams = {
+            code: 1,
+            data: {
+              id: resultData.id,
+              name: resultData.name,
+              email: resultData.email,
+              type: resultData.type,
+              state: resultData.state,
+              token: token
+            },
+            message: '登陆成功'
+        }
+
+      }
 
 
-    jsonWrite(res, resultParams)
-
-
-  })
+      jsonWrite(res, resultParams)
+    })
+  }
 
 })
 // 用户登出
@@ -105,7 +111,8 @@ router.post('/queryWeeklyList', (req,res) => {
       let selectWeeklyList = $sql.weekly.selectWeeklyList
       // let keywords = req.body.keywords
       let adminType = req.body.adminType
-
+      let startTime = req.body.startTime
+      let endTime = req.body.endTime
 
       // 分页查询入参 start
       let limitFirst = (params.pageNum-1)*params.pageSize;
@@ -113,19 +120,20 @@ router.post('/queryWeeklyList', (req,res) => {
       // 分页查询入参 end
 
       let objParams = []
-      objParams = [limitFirst, limitLast]
-
-      /*if(!keywords){
-          objParams = [limitFirst, limitLast];
-      }else{
-          objParams = ["%"+req.body.keywords+"%", limitFirst, limitLast];
-          selectWeeklyList += " and name like ?"; // 模糊查询
-      }
-
 
       if(adminType!=1){
-        selectWeeklyList += "and adminId = ?"
-      }*/
+        objParams.push(adminId)
+        selectWeeklyList += " and adminId = ?"
+      }
+      if(startTime){
+        objParams.push(startTime)
+        selectWeeklyList += " and create_time >= ?"
+      }
+      if(endTime){
+        objParams.push(endTime)
+        selectWeeklyList += " and create_time <= ?"
+      }
+      objParams.push(limitFirst, limitLast)
 
       selectWeeklyList += " order by id desc"; // id倒序排
       selectWeeklyList+= " limit ?,?"; // 分页查询
@@ -142,11 +150,12 @@ router.post('/queryWeeklyList', (req,res) => {
 
         if(result.length === 0) {
           resultParams = {
-              code: 2,
-              message: '查询有误'
+              code: 1,
+              data: [],
+              message: '成功'
           }
         }else{
-          let resultData = result[0]
+          let resultData = result
           resultParams = {
             code: 1,
             data: resultData,
@@ -157,77 +166,9 @@ router.post('/queryWeeklyList', (req,res) => {
 
         jsonWrite(res, resultParams)
 
-      }) 
+      })
     }
 
-
-
-    /*let params = req.body
-    let adminId = req.body.adminId
-    if(!adminId){
-      let unlogin = {
-          code: 20,
-          message: '登录有误'
-      }
-      jsonWrite(unlogin)
-    }else{
-      let keywords = req.body.keywords
-      let adminType = req.body.adminType
-
-      // 分页查询入参 start
-      let limitFirst = (params.pageNum-1)*params.pageSize;
-      let limitLast = params.pageSize;
-      // 分页查询入参 end
-
-      let objParams = []
-
-      let selectWeeklyList = $sql.weekly.selectWeeklyList
-
-      if(!keywords){
-          objParams = [limitFirst, limitLast];
-      }else{
-          objParams = ["%"+req.body.keywords+"%", limitFirst, limitLast];
-          selectWeeklyList += " and name like ?"; // 模糊查询
-      }
-
-
-      if(adminType!=1){
-        selectWeeklyList += "and adminId = ?"
-      }
-
-      selectWeeklyList += " order by id desc"; // id倒序排
-      selectWeeklyList+= " limit ?,?"; // 分页查询
-
-      conn.query(selectWeeklyList, objParams, function(err, result) {
-        let resultParams = {}
-        if(err) {
-          resultParams = {
-              code: -2,
-              message: '查询失败',
-              errMessage: err
-          }
-        }
-
-        if(result.length === 0) {
-          resultParams = {
-              code: 2,
-              message: '查询有误'
-          }
-        }else{
-          let resultData = result[0]
-          resultParams = {
-            code: 1,
-            data: resultData,
-            message: '成功'
-          }
-
-        }
-
-        jsonWrite(res, resultParams)
-
-      }) 
-
-    }*/
 
   }
 
