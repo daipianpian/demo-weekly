@@ -26,70 +26,96 @@ router.post('/logIn', (req,res) => {
   let params = req.body
   let name = params.name
   let password = params.password
-  if(!name || !password){
-    let resultParams = {
-        code: 20,
-        message: '用户名或者密码错误'
+  let objParams = [name, password]
+
+  let selectUser = $sql.user.selectUser
+
+  conn.query(selectUser, objParams, function(err, result) {
+    let resultParams = {}
+    if(err) {
+      resultParams = {
+          code: -2,
+          message: '查询失败',
+          errMessage: err
+      }
+      return jsonWrite(res, resultParams)
     }
-    res.json(resultParams)
-  }else{
-    let objParams = [name, password]
 
-    let selectUser = $sql.user.selectUser
+    if(result.length === 0) {
+      resultParams = {
+          code: 2,
+          data: {},
+          message: '用户或密码不正确'
+      }
+    }else{
+      let resultData = result[0]
+       /**设置移动端登录连续30分钟过后过期**/
+      let expires = moment().add(30, 'minutes').valueOf();
+      // let expires = moment().add(20, 'seconds').valueOf();
+      let token = jwt.encode({
+        iss: result.id,
+        exp: expires,
+      }, app.get('jwtTokenSecret'));
 
-    conn.query(selectUser, objParams, function(err, result) {
-      let resultParams = {}
-      if(err) {
-        resultParams = {
-            code: -2,
-            message: '查询失败',
-            errMessage: err
-        }
+      resultParams = {
+          code: 1,
+          data: {
+            id: resultData.id,
+            name: resultData.name,
+            email: resultData.email,
+            type: resultData.type,
+            state: resultData.state,
+            token: token
+          },
+          message: '登陆成功'
       }
 
-      if(result.length === 0) {
-        resultParams = {
-            code: 2,
-            data: {},
-            message: '用户或密码不正确'
-        }
-      }else{
-        let resultData = result[0]
-         /**设置移动端登录连续30分钟过后过期**/
-        let expires = moment().add(30, 'minutes').valueOf();
-        // let expires = moment().add(20, 'seconds').valueOf();
-        let token = jwt.encode({
-          iss: result.id,
-          exp: expires,
-        }, app.get('jwtTokenSecret'));
-
-        resultParams = {
-            code: 1,
-            data: {
-              id: resultData.id,
-              name: resultData.name,
-              email: resultData.email,
-              type: resultData.type,
-              state: resultData.state,
-              token: token
-            },
-            message: '登陆成功'
-        }
-
-      }
+    }
 
 
-      jsonWrite(res, resultParams)
-    })
-  }
+    return jsonWrite(res, resultParams)
+
+
+  })
 
 })
+
 // 用户登出
 router.post('/logOut', (req,res) => {
+  let params = req.body
+  let userId = params.userId
+  let resultParams = {}
+  let token=req.headers.token //获取前端请求头发送过来的token
+  let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
+  if (decoded.exp <= Date.now()) {
+    resultParams = {
+        code: 20,
+        message: '登录过期'
+    }
+  } else {
+    if(!userId){
+      resultParams = {
+        code: 2,
+        message: 'userId参数有误'
+      }
+    }else{
+      let expires = moment().add(100, 'milliseconds').valueOf();
+      let token = jwt.encode({
+        iss: userId,
+        exp: expires,
+      }, app.get('jwtTokenSecret'));
+      resultParams = {
+        code: 1,
+        message: '退出登录成功'
+      }
+    }
+  }
+  return jsonWrite(res, resultParams)
+
 })
 
+// 周报列表
 router.post('/queryWeeklyList', (req,res) => {
-
   let token=req.headers.token //获取前端请求头发送过来的token
   let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
   if (decoded.exp <= Date.now()) {
@@ -97,20 +123,21 @@ router.post('/queryWeeklyList', (req,res) => {
         code: 20,
         message: '登录过期'
     }
-    res.json(resultParams)
+    return jsonWrite(res, resultParams)
   } else {
     let params = req.body
-    let adminId = params.adminId
-    if(!adminId){
+    let userId = params.userId
+    if(!userId){
       let resultParams = {
-          code: 20,
-          message: 'adminId参数有误'
+          code: 2,
+          message: 'userId参数有误'
       }
-      res.json(resultParams)
+      return jsonWrite(res, resultParams)
     }else{
+      let selectWeeklyCount = $sql.weekly.selectWeeklyCount
       let selectWeeklyList = $sql.weekly.selectWeeklyList
       // let keywords = req.body.keywords
-      let adminType = req.body.adminType
+      let userType = req.body.userType
       let startTime = req.body.startTime
       let endTime = req.body.endTime
 
@@ -120,25 +147,25 @@ router.post('/queryWeeklyList', (req,res) => {
       // 分页查询入参 end
 
       let objParams = []
+      let totalCount = 0
+      let selectSql = ''
 
-      if(adminType!=1){
-        objParams.push(adminId)
-        selectWeeklyList += " and adminId = ?"
+      if(userType!=1){
+        objParams.push(userId)
+        selectSql += " and userId = ?"
       }
       if(startTime){
         objParams.push(startTime)
-        selectWeeklyList += " and create_time >= ?"
+        selectSql += " and weekly.create_time >= ?"
       }
       if(endTime){
         objParams.push(endTime)
-        selectWeeklyList += " and create_time <= ?"
+        selectSql += " and weekly.create_time <= ?"
       }
-      objParams.push(limitFirst, limitLast)
+      selectSql += " order by weekly.id desc"; // id倒序排
 
-      selectWeeklyList += " order by id desc"; // id倒序排
-      selectWeeklyList+= " limit ?,?"; // 分页查询
-
-      conn.query(selectWeeklyList, objParams, function(err, result) {
+      let objSelectCount = selectWeeklyCount+selectSql
+      conn.query(objSelectCount, objParams, function(err, result) {
         let resultParams = {}
         if(err) {
           resultParams = {
@@ -146,36 +173,98 @@ router.post('/queryWeeklyList', (req,res) => {
               message: '查询失败',
               errMessage: err
           }
+          return jsonWrite(res, resultParams)
         }
+        if(result){
+          totalCount = result.length===0 ? 0 : result[0].totalCount
+          objParams.push(limitFirst, limitLast)
+          selectSql+= " limit ?,?"; // 分页查询
+          let objSelectList = selectWeeklyList+selectSql
+          conn.query(objSelectList, objParams, function(err, subResult) {
+            let resultParams = {}
+            if(err) {
+              resultParams = {
+                  code: -2,
+                  message: '查询失败',
+                  errMessage: err
+              }
+              return jsonWrite(res, resultParams)
+            }
+            if(subResult){
+              let resultData = {
+                list: subResult.length===0 ? [] : subResult,
+                totalCount: totalCount
+              }
+              resultParams = {
+                code: 1,
+                data: resultData,
+                message: '成功'
+              } 
+              return jsonWrite(res, resultParams)
+            }
+            
 
-        if(result.length === 0) {
-          resultParams = {
-              code: 1,
-              data: [],
-              message: '成功'
-          }
-        }else{
-          let resultData = result
-          resultParams = {
-            code: 1,
-            data: resultData,
-            message: '成功'
-          }
-
+          })
         }
-
-        jsonWrite(res, resultParams)
+        
 
       })
+
+
+
     }
 
 
   }
 
+})
 
-
-
-
+// 查询周报详情
+router.post('/queryWeeklyDetail', (req,res) => {
+  let token=req.headers.token //获取前端请求头发送过来的token
+  let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
+  if (decoded.exp <= Date.now()) {
+    let resultParams = {
+        code: 20,
+        message: '登录过期'
+    }
+    return jsonWrite(res, resultParams)
+  } else {
+    let params = req.body
+    let weeklyId = params.weeklyId
+    let userId = params.userId
+    
+    if(!weeklyId || !userId){
+      resultParams = {
+        code: 2,
+        message: '参数有误'
+      }
+      return jsonWrite(res, resultParams)
+    }else{
+      let selectWeeklyDetail = $sql.weekly.selectWeeklyDetail
+      let objParams = [weeklyId, userId]
+      conn.query(selectWeeklyDetail, objParams, function(err, result) {
+        let resultParams = {}
+        if(err) {
+          resultParams = {
+              code: -2,
+              message: '查询失败',
+              errMessage: err
+          }
+          return jsonWrite(res, resultParams)
+        }
+        if(result){
+          let resultData = result.length===0 ? {} : result[0]
+          resultParams = {
+            code: 1,
+            data: resultData,
+            message: '成功'
+          } 
+          return jsonWrite(res, resultParams)
+        }
+      })
+    }
+  }
 })
 
 module.exports = router
