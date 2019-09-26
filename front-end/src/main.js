@@ -6,10 +6,15 @@ import './themes/element/element-variables.scss'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import common from './assets/js/common.js'
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+
+const bus = new Vue()
+window.bus = bus
+Vue.prototype.$common = common
 
 new Vue({
   router,

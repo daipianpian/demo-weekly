@@ -52,15 +52,28 @@
         <el-table-column prop="" label="身份" align="center"></el-table-column>
         <el-table-column prop="" label="创建时间" align="center"></el-table-column>
         <el-table-column prop="" label="更新时间" align="center"></el-table-column>
+        <el-table-column prop="state" label="状态" align="center">
+          <template slot-scope="scope">
+            <el-select size="medium" class="state-select" :class="{'text-danger': scope.row.state==2}" v-model="scope.row.state" placeholder="请选择" @change="updateState(scope.row.id,scope.row.state)">
+              <el-option
+                v-for="item in stateOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEdit(scope.row.id)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              plain
+              @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -70,26 +83,40 @@
     <AddUser v-if="showFlag.add" ref="addUser" @addCallBack="callBackAddUser"/>
     <!-- 新增用户 end -->
 
+    <!-- 编辑用户 start -->
+    <EditUser v-if="showFlag.edit" ref="editUser" @editCallBack="callBackEditUser"/>
+    <!-- 编辑用户 end -->
+
   </div>
 </template>
 
 <script>
 import AddUser from '@/components/UserInfo/Add'
+import EditUser from '@/components/UserInfo/Edit'
 export default {
   data () {
     return {
       searchKeywords: {},
       tableData: [
-        { 'id': 1 },
-        { 'id': 2 }
+        { 'id': 1, 'state': 1 },
+        { 'id': 2, 'state': 2 }
       ],
       showFlag: {
-        add: false
-      }
+        add: false,
+        edit: false
+      },
+      stateOptions: [{ // 下拉框-状态
+        value: 1,
+        label: '启用'
+      }, {
+        value: 2,
+        label: '禁用'
+      }]
     }
   },
   components: {
-    AddUser
+    AddUser,
+    EditUser
   },
   methods: {
     onSearch () {},
@@ -102,14 +129,31 @@ export default {
         this.$refs.addUser.init()
       })
     },
-    handleEdit () {},
-    handleDelete () {},
+    handleEdit (objUserId) {
+      this.showFlag.edit = true
+      this.$nextTick(() => {
+        this.$refs.editUser.init(objUserId)
+      })
+    },
+    handleDelete () {
+      this.$common.msgBox('confirm', '操作提示', '是否确定删除此管理员？', () => {
+        console.log('确定')
+      })
+    },
+    updateState () {},
     // 新增管理员子组件回调
-    callBackAddUser () {}
+    callBackAddUser () {},
+    // 编辑管理员子组件回调
+    callBackEditUser () {}
   }
 }
 </script>
 
 <style lang="scss">
-
+.userinfo-wrap{
+  .el-table{
+    .el-select{width: 80px;}
+    .el-input__inner{color: inherit;}
+  }
+}
 </style>
