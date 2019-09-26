@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+/* 去掉input尾部上下小箭头 start */
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -o-appearance: none !important;
+  -ms-appearance: none !important;
+  appearance: none !important;
+  margin: 0;
+}
+input[type="number"]{
+  -webkit-appearance:textfield;
+  -moz-appearance:textfield;
+  -o-appearance:textfield;
+  -ms-appearance:textfield;
+  appearance:textfield;
+}
+/* 去掉input尾部上下小箭头 end */
+
+.el-form .line{text-align: center;}
+
+.float-left {float:left;}
+.float-right {float:right;}
+.clearfix{ overflow: hidden; zoom: 1; }
+
+
+.flex{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-o-box;display:-webkit-flex;display:flex}
+.flex-item{-webkit-box-flex:1;-moz-box-flex:1;-ms-flex:1;-webkit-flex:1;flex:1}
+
+/* 右边主框样式 */
+.hr-10{width: 100%; height: 10px; margin-left: -20px;padding:0 20px; background: $color-bg;}
+.el-main{min-width: 1070px;}
+.table-header th{background: $color-bg;}
+.main-search{
+  margin-bottom: 20px;
+  .el-input,.el-select{width:200px;}
+}
+
+.main-content{
+  margin-bottom: 60px; padding: 20px 0;
+  .content-header{margin-bottom: 20px;}
+}
+
+/* 适配 start */
+@media screen and (max-width: 1440px){
+  .main-search{
+    .el-input,.el-select{width:180px;}
+  }
+}
+
+@media screen and (max-width: 1360px){
+  .main-search{
+    .el-input,.el-select{width:160px;}
+  }
+}

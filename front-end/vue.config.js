@@ -12,7 +12,11 @@ module.exports = {
     css:{
         extract: true,
         sourceMap: false,
-        loaderOptions: {}
+        loaderOptions: {
+            sass: {
+                data: `@import "./src/assets/styles/globals.scss";`
+            }
+        }
     },
     devServer:{
         port:8080,

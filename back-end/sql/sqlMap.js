@@ -1,6 +1,7 @@
 const sqlMap = {
   user: {
-    selectUser: 'select * from user where name = ? and password = ? and state=1'
+    selectUser: 'select * from user where name = ? and password = ? and state=1',
+    userList: 'select * from user where state=1'
   },
   weekly: {
     selectWeeklyCount: 'select count(*) as totalCount from weekly where weekly.state=1', // 查询周报列表条数
