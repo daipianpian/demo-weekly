@@ -29,8 +29,8 @@
       </el-row>
       <el-row>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit">搜索</el-button>
-            <el-button @click="resetForm('searchKeywords')">重置</el-button>
+            <el-button type="primary" @click="onSearch">搜索</el-button>
+            <el-button @click="onReset('searchKeywords')">重置</el-button>
         </el-form-item>
       </el-row>
     </el-form>
@@ -42,7 +42,7 @@
 
     <div class="main-content">
       <div class="content-header">
-        <el-button type="primary" size="medium" @click="handleAdd">新增管理员</el-button>
+        <el-button type="primary" size="medium" @click="handleAddUser">新增管理员</el-button>
       </div>
       <el-table :data="tableData" header-row-class-name="table-header" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center">
@@ -65,10 +65,16 @@
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 新增用户 start -->
+    <AddUser v-if="showFlag.add" ref="addUser" @addCallBack="callBackAddUser"/>
+    <!-- 新增用户 end -->
+
   </div>
 </template>
 
 <script>
+import AddUser from '@/components/UserInfo/Add'
 export default {
   data () {
     return {
@@ -76,14 +82,30 @@ export default {
       tableData: [
         { 'id': 1 },
         { 'id': 2 }
-      ]
+      ],
+      showFlag: {
+        add: false
+      }
     }
   },
   components: {
-
+    AddUser
   },
   methods: {
-
+    onSearch () {},
+    onReset (formName) {
+      this.$refs[formName].resetFields()
+    },
+    handleAddUser () {
+      this.showFlag.add = true
+      this.$nextTick(() => {
+        this.$refs.addUser.init()
+      })
+    },
+    handleEdit () {},
+    handleDelete () {},
+    // 新增管理员子组件回调
+    callBackAddUser () {}
   }
 }
 </script>

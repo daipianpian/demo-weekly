@@ -42,6 +42,15 @@ input[type="number"]{
   .content-header{margin-bottom: 20px;}
 }
 
+/*新增或者编辑的对话框样式 start*/
+.el-dialog{
+  width: 800px;
+  &.dialog-medium{width: 700px;}
+  &.dialog-small{width: 600px;}
+  &.dialog-mini{width: 500px;}
+}
+  
+
 /* 适配 start */
 @media screen and (max-width: 1440px){
   .main-search{
