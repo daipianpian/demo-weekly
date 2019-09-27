@@ -29,8 +29,8 @@
       </el-row>
       <el-row>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit">搜索</el-button>
-            <el-button @click="resetForm('searchKeywords')">重置</el-button>
+            <el-button type="primary" @click="onSearch">搜索</el-button>
+            <el-button @click="onReset('searchKeywords')">重置</el-button>
         </el-form-item>
       </el-row>
     </el-form>
@@ -56,19 +56,30 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEdit(scope.row.id)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 新增用户 start -->
+    <Add v-if="showFlag.add" ref="add" @addCallBack="callBackAdd"/>
+    <!-- 新增用户 end -->
+
+    <!-- 编辑用户 start -->
+    <Edit v-if="showFlag.edit" ref="edit" @editCallBack="callBackEdit"/>
+    <!-- 编辑用户 end -->
+
   </div>
 </template>
 
 <script>
+import Add from '@/components/WeeklyList/Add'
+import Edit from '@/components/WeeklyList/Edit'
 export default {
   data () {
     return {
@@ -76,14 +87,44 @@ export default {
       tableData: [
         { 'id': 1 },
         { 'id': 2 }
-      ]
+      ],
+      showFlag: {
+        add: false,
+        edit: false
+      }
     }
   },
   components: {
-
+    Add,
+    Edit
   },
   methods: {
-
+    onSearch () {},
+    onReset (formName) {
+      this.$refs[formName].resetFields()
+    },
+    handleAdd () {
+      this.showFlag.add = true
+      this.$nextTick(() => {
+        this.$refs.add.init()
+      })
+    },
+    handleEdit (objWeeklyId) {
+      this.showFlag.edit = true
+      this.$nextTick(() => {
+        this.$refs.edit.init(objWeeklyId)
+      })
+    },
+    handleDelete () {
+      this.$common.msgBox('confirm', '操作提示', '是否确定删除此条周报信息？', () => {
+        console.log('确定')
+      })
+    },
+    updateState () {},
+    // 新增管理员子组件回调
+    callBackAdd () {},
+    // 编辑管理员子组件回调
+    callBackEdit () {}
   }
 }
 </script>

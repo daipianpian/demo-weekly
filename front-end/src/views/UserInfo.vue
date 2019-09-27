@@ -42,7 +42,7 @@
 
     <div class="main-content">
       <div class="content-header">
-        <el-button type="primary" size="medium" @click="handleAddUser">新增管理员</el-button>
+        <el-button type="primary" size="medium" @click="handleAdd">新增管理员</el-button>
       </div>
       <el-table :data="tableData" header-row-class-name="table-header" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center">
@@ -80,19 +80,19 @@
     </div>
 
     <!-- 新增用户 start -->
-    <AddUser v-if="showFlag.add" ref="addUser" @addCallBack="callBackAddUser"/>
+    <Add v-if="showFlag.add" ref="add" @addCallBack="callBackAdd"/>
     <!-- 新增用户 end -->
 
     <!-- 编辑用户 start -->
-    <EditUser v-if="showFlag.edit" ref="editUser" @editCallBack="callBackEditUser"/>
+    <Edit v-if="showFlag.edit" ref="edit" @editCallBack="callBackEdit"/>
     <!-- 编辑用户 end -->
 
   </div>
 </template>
 
 <script>
-import AddUser from '@/components/UserInfo/Add'
-import EditUser from '@/components/UserInfo/Edit'
+import Add from '@/components/UserInfo/Add'
+import Edit from '@/components/UserInfo/Edit'
 export default {
   data () {
     return {
@@ -115,24 +115,24 @@ export default {
     }
   },
   components: {
-    AddUser,
-    EditUser
+    Add,
+    Edit
   },
   methods: {
     onSearch () {},
     onReset (formName) {
       this.$refs[formName].resetFields()
     },
-    handleAddUser () {
+    handleAdd () {
       this.showFlag.add = true
       this.$nextTick(() => {
-        this.$refs.addUser.init()
+        this.$refs.add.init()
       })
     },
     handleEdit (objUserId) {
       this.showFlag.edit = true
       this.$nextTick(() => {
-        this.$refs.editUser.init(objUserId)
+        this.$refs.edit.init(objUserId)
       })
     },
     handleDelete () {
@@ -142,9 +142,9 @@ export default {
     },
     updateState () {},
     // 新增管理员子组件回调
-    callBackAddUser () {},
+    callBackAdd () {},
     // 编辑管理员子组件回调
-    callBackEditUser () {}
+    callBackEdit () {}
   }
 }
 </script>

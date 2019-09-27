@@ -74,6 +74,9 @@ export default {
     .user-info .el-button{font-size: 16px;}
   }
   .el-aside{background: #283643;}
+  .el-menu{border: none;
+    .el-menu-item{font-size: 16px;}
+  }
 }
 .el-dropdown-menu__item{padding: 0 40px;}
 </style>

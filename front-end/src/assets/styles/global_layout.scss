@@ -27,6 +27,10 @@ input[type="number"]{
 
 .flex{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-o-box;display:-webkit-flex;display:flex}
 .flex-item{-webkit-box-flex:1;-moz-box-flex:1;-ms-flex:1;-webkit-flex:1;flex:1}
+.flex-center-center{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-o-box;display:box;display:-webkit-flex;display:flex;-webkit-justify-content:center;-moz-justify-content:center;-ms-justify-content:center;-o-justify-content:center;justify-content:center;-webkit-align-items:center;-moz-align-items:center;-ms-align-items:center;-o-align-items:center;align-items:center}
+.sub-center-center{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-o-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+.sub-h-center{position:absolute;left:50%;-webkit-transform:translate(-50%,0%);-moz-transform:translate(-50%,0%);-o-transform:translate(-50%,0%);-ms-transform:translate(-50%,0%);transform:translate(-50%,0%)}
+.sub-v-center{position:absolute;top:50%;-webkit-transform:translate(0%,-50%);-moz-transform:translate(0%,-50%);-o-transform:translate(0%,-50%);-ms-transform:translate(0%,-50%);transform:translate(0%,-50%)}
 
 .text-main{color: $color-main;}
 .text-success{color: $color-success;}
@@ -40,17 +44,24 @@ input[type="number"]{
 .bg-danger{color:#ffffff; background: $color-danger;}
 .bg-info{color:#ffffff; background: $color-info;}
 
+/* Dialog 对话框-底部按钮样式重置 start */
+.el-message-box__btns{overflow: hidden; zoom: 1;}
+.messagebox-cancel-button{float: right;}
+.el-message-box__btns button:nth-child(2){margin-right: 10px;}
+/* Dialog 对话框-底部按钮样式重置 end */
+
 /* 右边主框样式 */
-.hr-10{width: 100%; height: 10px; margin-left: -20px;padding:0 20px; background: $color-bg;}
+.hr-10{width: 100%; height: 10px; background: $color-bg;}
 .el-main{min-width: 1070px;}
 .table-header th{background: $color-bg;}
+.el-main{padding: 0;}
 .main-search{
-  margin-bottom: 20px;
+  padding: 20px 20px 0;
   .el-input,.el-select{width:200px;}
 }
 
 .main-content{
-  margin-bottom: 60px; padding: 20px 0;
+  margin-bottom: 40px; padding: 20px;
   .content-header{margin-bottom: 20px;}
 }
 
@@ -61,6 +72,9 @@ input[type="number"]{
   &.dialog-small{width: 600px;}
   &.dialog-mini{width: 500px;}
   .el-input,.el-select{width:100%;}
+  .dialog-footer{
+    .el-button{margin: 0 20px;}
+  }
 }
   
 

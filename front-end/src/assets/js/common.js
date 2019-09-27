@@ -1,3 +1,5 @@
+import { Message } from 'element-ui'
+
 const commonFn = {
 	toast (str, type, showClose, onCloseFn) {
 		let time = 1000
@@ -40,6 +42,7 @@ const commonFn = {
 				bus.$confirm(message, title, {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
+					cancelButtonClass: 'messagebox-cancel-button',
 					dangerouslyUseHTMLString: true,
 					type: 'warning'
 				}).then(() => {

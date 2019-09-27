@@ -10,11 +10,11 @@
       <el-form-item label="邮箱">
         <el-input v-model="form.name" placeholder="请输入管理员邮箱"></el-input>
       </el-form-item>
+      <el-form-item class="dialog-footer" align="center">
+        <el-button type="primary" @click="onConfirm">保 存</el-button>
+        <el-button @click="onCancel">取 消</el-button>
+      </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="onConfirm">确 定</el-button>
-      <el-button @click="onCancel">取 消</el-button>
-    </div>
   </el-dialog>
 </template>
 

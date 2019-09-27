@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px" class="login-main">
+    <el-form class="login-main sub-center-center" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px">
       <h3 class="title">周报管理系统登录</h3>
       <el-form-item prop="account">
         <el-input type="text" v-model="ruleForm.account" auto-complete="off" placeholder="账号"></el-input>
@@ -58,8 +58,8 @@ export default {
 </script>
 
 <style lang="scss">
-.login-container{width: 100vw; height: 100vh;background-image:url('../assets/images/login_bg.png'); background-size: cover; overflow: hidden;
-  .login-main{ -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; background-clip: padding-box; margin: 140px auto; width: 350px; padding: 35px 35px 15px; background: #fff; border: 1px solid #eaeaea; box-shadow: 0 0 25px #cac6c6;
+.login-container{position: relative; width: 100vw; height: 100vh;background-image:url('../assets/images/login_bg.png'); background-size: cover; overflow: hidden;
+  .login-main{ -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; background-clip: padding-box; width: 350px; padding: 35px 35px 15px; background: #fff; border: 1px solid #eaeaea; box-shadow: 0 0 25px #cac6c6;
     h3{text-align: center;}
     .btn-box{text-align: center;}
   }

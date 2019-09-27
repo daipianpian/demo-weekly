@@ -7,14 +7,22 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import common from './assets/js/common.js'
+import vueQuillEditor from 'vue-quill-editor' // 引入富文本工具
+// require styles 引入样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import moment from 'moment'
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+Vue.use(vueQuillEditor)
 
 const bus = new Vue()
 window.bus = bus
 Vue.prototype.$common = common
+Vue.prototype.$moment = moment
 
 new Vue({
   router,
