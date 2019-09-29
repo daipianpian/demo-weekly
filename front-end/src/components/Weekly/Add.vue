@@ -5,7 +5,7 @@
       <el-form-item label="周报时间">
         <el-col :span="12">
           <el-date-picker
-            v-model="form.weekOfYear"
+            v-model="formData.weekOfYear"
             type="week"
             format="yyyy 第 WW 周"
             value-format="yyyy-MM-dd"
@@ -22,17 +22,17 @@
       </el-form-item>
 
       <el-form-item label="这周完成工作">
-        <quill-editor class="quill" :options="editorOption" ref="QuillEditor" v-model="form.thisWeekWork">
+        <quill-editor class="quill" :options="editorOption" ref="QuillEditor" v-model="formData.thisWeekWork">
         </quill-editor>
       </el-form-item>
 
       <el-form-item label="下周工作计划">
-        <quill-editor class="quill" :options="editorOption" ref="QuillEditor" v-model="form.nextWeekWork">
+        <quill-editor class="quill" :options="editorOption" ref="QuillEditor" v-model="formData.nextWeekWork">
         </quill-editor>
       </el-form-item>
 
       <el-form-item label="需协调与帮助">
-        <el-input v-model="form.collaboration"></el-input>
+        <el-input v-model="formData.collaboration"></el-input>
       </el-form-item>
 
       <el-form-item class="dialog-footer" align="center">
@@ -105,7 +105,7 @@ export default {
     // 确定
     onConfirm () {
       let weekOfYear = this.formData.weekOfYear
-      console.log('form.weekOfYear==' + weekOfYear)
+      console.log('formData.weekOfYear==' + weekOfYear)
 
       let yearNum = this.$moment(weekOfYear).year()
       console.log('yearNum===' + yearNum)

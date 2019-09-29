@@ -16,7 +16,8 @@ module.exports = {
             sass: {
                 data: `@import "./src/assets/styles/globals.scss";`
             }
-        }
+        },
+        modules: false
     },
     devServer:{
         port:8080,
@@ -35,5 +36,9 @@ module.exports = {
         performance: {
             hints:false
         }
-    }
+    },
+    // 构建时开启多进程处理 babel 编译
+    parallel: require('os').cpus().length > 1,
+    // 第三方插件配置
+    pluginOptions: {}
 }

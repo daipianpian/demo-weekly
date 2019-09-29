@@ -19,18 +19,14 @@
       <!-- aside-nav start -->
       <el-aside width="200px">
         <el-menu
-          :default-active="$route.path"
+          :default-active="activePath"
           background-color="#283643"
           text-color="#fff"
           active-text-color="#1CC09F"
           router>
-          <el-menu-item index="/home/userinfo">
-            <i class="el-icon-user"></i>
-            <span slot="title">用户管理</span>
-          </el-menu-item>
-          <el-menu-item index="/home/weeklylist">
-            <i class="el-icon-s-grid"></i>
-            <span slot="title">周报列表</span>
+          <el-menu-item v-for="item in menuList" :key="item.url" :index="item.url">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.name}}</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -50,6 +46,8 @@
 export default {
   data () {
     return {
+      menuList: this.$store.state.menuList,
+      activePath: null
     }
   },
   components: {
@@ -58,8 +56,14 @@ export default {
   computed: {
 
   },
+  watch: {
+    '$route': function (to, from) {
+      this.activePath = to.meta.pagePath
+    }
+  },
   created () {
     console.log('$route.path==' + this.$route.path)
+    this.activePath = this.$route.meta.pagePath
   },
   methods: {
 
