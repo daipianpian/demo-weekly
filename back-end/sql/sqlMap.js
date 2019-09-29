@@ -1,12 +1,31 @@
 const sqlMap = {
   user: {
-    selectUser: 'select * from user where name = ? and password = ? and state=1',
-    userList: 'select * from user where state=1'
+    // 登陆
+    logIn: 'select * from user where name = ? and password = ? and state != 0',
+    // 新增用户
+    addUser: 'insert into user (name, password, email, create_time, update_time) values (?, ?, ?, ?, ?)',
+    // 更新用户信息
+    updateUser: 'update table user set password = ?, email = ?, update_time = ? where id = ? and state != 0',
+    // 更改用户状态
+    updateUserState: 'update table user set state = ?, update_time = ? where id = ? and state != 0',
+    // 获取用户信息
+    getUserInfo = 'select * from user where id = ? and state != 0',
+    // 用户列表
+    selectUserList: 'select * from user where state != 0'
   },
   weekly: {
-    selectWeeklyCount: 'select count(*) as totalCount from weekly where weekly.state=1', // 查询周报列表条数
-    selectWeeklyList: 'select weekly.id, userId, user.name as userName, startTime, endTime, weekOfYear, weekly.create_time, weekly.update_time, weekly.state from weekly,user where weekly.userId = user.id and weekly.state=1',  // 查询周报列表
-    selectWeeklyDetail: 'select weekly.id, userId, user.name as userName, startTime, endTime, weekOfYear, thisWeekWork, nextWeekWork, collaboration, weekly.create_time, weekly.update_time, weekly.state from weekly,user where weekly.userId = user.id and weekly.state=1 and weekly.id=? and weekly.userId=?'  // 以id为主条件查询某篇周报详情
+    // 新增周报
+    addWeekly: 'insert into weekly (adminId, startTime, endTime, weekOfYear, thisWeekWork, nextWeekWork, collaboration, create_time, update_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    // 更新周报信息
+    updateWeekly: 'update table weekly set startTime = ?, endTime = ?, weekOfYear = ?, thisWeekWork = ?, nextWeekWork = ?, collaboration = ?, update_time = ? where id = ? and state != 0',
+    // 更新周报状态
+    updateWeeklyState: 'update table weekly set state = ?, update_time = ? where id = ? and state != 0',
+    // 查询周报列表条数
+    selectWeeklyCount: 'select count(*) as totalCount from weekly where weekly.state != 0',
+     // 查询周报列表
+    selectWeeklyList: 'select weekly.id, userId, user.name as userName, startTime, endTime, weekOfYear, weekly.create_time, weekly.update_time, weekly.state from weekly,user where weekly.userId = user.id and weekly.state != 0',
+    // 以id为主条件查询某篇周报详情
+    getWeeklyDetail: 'select weekly.id, userId, user.name as userName, startTime, endTime, weekOfYear, thisWeekWork, nextWeekWork, collaboration, weekly.create_time, weekly.update_time, weekly.state from weekly,user where weekly.userId = user.id and weekly.state != 0 and weekly.id=? and weekly.userId=?'
   }
 }
 module.exports = sqlMap;

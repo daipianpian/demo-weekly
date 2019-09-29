@@ -28,9 +28,9 @@ router.post('/logIn', (req,res) => {
   let password = params.password
   let objParams = [name, password]
 
-  let selectUser = $sql.user.selectUser
+  let logIn = $sql.user.logIn
 
-  conn.query(selectUser, objParams, function(err, result) {
+  conn.query(logIn, objParams, function(err, result) {
     let resultParams = {}
     if(err) {
       resultParams = {
