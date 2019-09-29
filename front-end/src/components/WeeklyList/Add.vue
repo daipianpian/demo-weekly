@@ -1,16 +1,24 @@
 <template>
   <el-dialog title="新增周报" :visible.sync="showFlag" top="7vh" @close="closeDialog">
-    <el-form ref="form" :model="form" label-width="120px">
+    <el-form ref="formData" :model="formData" :rules="formRules" label-width="120px">
 
       <el-form-item label="周报时间">
-        <el-date-picker
-          v-model="form.weekOfYear"
-          type="week"
-          format="yyyy 第 WW 周"
-          value-format="yyyy-MM-dd"
-          placeholder="选择周"
-          :picker-options="pickerOptions">
-        </el-date-picker>
+        <el-col :span="12">
+          <el-date-picker
+            v-model="form.weekOfYear"
+            type="week"
+            format="yyyy 第 WW 周"
+            value-format="yyyy-MM-dd"
+            placeholder="选择周"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-col>
+        <el-col class="week-time" :span="12">
+          <span class="title">时间范围：</span>
+          <span><i class="el-icon-date"></i> {{weekStartTime}}</span>
+          <span class="line">-</span>
+          <span><i class="el-icon-date"></i> {{weekEndTime}}</span>
+        </el-col>
       </el-form-item>
 
       <el-form-item label="这周完成工作">
@@ -42,8 +50,10 @@ export default {
   data () {
     return {
       showFlag: false,
-      form: {},
-      rules: {},
+      formData: {
+        weekOfYear: this.$moment().format('YYYY-MM-DD')
+      },
+      formRules: {},
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() > Date.now()
@@ -66,6 +76,20 @@ export default {
   },
   components: {
   },
+  computed: {
+    // 周报开始时间
+    weekStartTime: function () {
+      let weekOfYear = this.formData.weekOfYear
+      let weekStartTime = this.$moment(weekOfYear).startOf('week').format('YYYY-MM-DD')
+      return weekStartTime
+    },
+    // 周报结束时间
+    weekEndTime: function () {
+      let weekOfYear = this.formData.weekOfYear
+      let weekEndTime = this.$moment(weekOfYear).endOf('week').format('YYYY-MM-DD')
+      return weekEndTime
+    }
+  },
   created () {
   },
   methods: {
@@ -80,7 +104,7 @@ export default {
     },
     // 确定
     onConfirm () {
-      let weekOfYear = this.form.weekOfYear
+      let weekOfYear = this.formData.weekOfYear
       console.log('form.weekOfYear==' + weekOfYear)
 
       let yearNum = this.$moment(weekOfYear).year()
@@ -89,11 +113,6 @@ export default {
       let weekNum = this.$moment(weekOfYear).week()
       console.log('weekNum===' + weekNum)
 
-      let weekStart = this.$moment(weekOfYear).startOf('week').format('YYYY-MM-DD')
-      console.log('weekStart===' + weekStart)
-
-      let weekEnd = this.$moment(weekOfYear).endOf('week').format('YYYY-MM-DD')
-      console.log('weekEnd===' + weekEnd)
       // this.changeShowFlag()
     },
     // 取消
@@ -101,18 +120,13 @@ export default {
       this.changeShowFlag()
     },
     // 关闭弹出框
-    closeDialog () {}
+    closeDialog () {
+      this.$refs['formData'].resetFields()
+    }
   }
 }
 </script>
 
 <style lang="scss">
-.quill-editor { height: 200px; }
-.quill-editor .ql-container { height: 70%; }
-.limit { height: 30px; border: 1px solid #ccc; line-height: 30px; text-align: right; }
-.limit span { color: #ee2a7b; }
 
-.ql-snow .ql-editor img { max-width: 480px; }
-
-.ql-editor .ql-video { max-width: 480px; }
 </style>

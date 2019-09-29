@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="新增管理员" :visible.sync="showFlag" custom-class="dialog-small" @close="closeDialog">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="formData" :model="formData" :rules="formRules" label-width="80px">
       <el-form-item label="账号">
         <el-input v-model="form.name" placeholder="请输入管理员账号"></el-input>
       </el-form-item>
@@ -23,8 +23,8 @@ export default {
   data () {
     return {
       showFlag: false,
-      form: {},
-      rules: {}
+      formData: {},
+      formRules: {}
     }
   },
   components: {
@@ -50,7 +50,9 @@ export default {
       this.changeShowFlag()
     },
     // 关闭弹出框
-    closeDialog () {}
+    closeDialog () {
+      this.$refs['formData'].resetFields()
+    }
   }
 }
 </script>

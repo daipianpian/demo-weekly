@@ -130,5 +130,16 @@ export default {
 </script>
 
 <style lang="scss">
+.quill-editor { height: 200px;
+  .ql-container { height: 70%; }
+  .limit { height: 30px; border: 1px solid #ccc; line-height: 30px; text-align: right; }
+  .limit span { color: #ee2a7b; }
+  .ql-snow .ql-editor img { max-width: 480px; }
+  .ql-editor .ql-video { max-width: 480px; }
+}
 
+.week-time{
+  .title{margin-left: 30px;}
+  .line{display: inline-block; width: 30px;}
+}
 </style>
