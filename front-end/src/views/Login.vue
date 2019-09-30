@@ -39,6 +39,7 @@ export default {
     submitLogin (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          // password: md5(this.userInfo.password+encryInfo)
           this.$message({
             message: '登陆成功',
             type: 'success',

@@ -13,6 +13,7 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import moment from 'moment'
+import md5 from 'js-md5'
 
 Vue.config.productionTip = false
 
@@ -23,6 +24,7 @@ const bus = new Vue()
 window.bus = bus
 Vue.prototype.$common = common
 Vue.prototype.$moment = moment
+Vue.prototype.$md5 = md5
 
 new Vue({
   router,
