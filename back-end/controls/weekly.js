@@ -1,4 +1,4 @@
-const models = require('../config/db');
+const db = require('../config/db');
 const jwt = require('jwt-simple');
 const express = require('express');
 const router = express.Router();
@@ -9,13 +9,13 @@ const app = express();
 app.set('jwtTokenSecret', 'YOUR_SECRET_STRING');
 
 // 连接数据库
-const conn = mysql.createConnection(models.mysql);
+const conn = mysql.createConnection(db);
 conn.connect();
-const jsonWrite = function(res, ret) {
-    if(typeof ret === 'undefined') {
+const jsonWrite = function(res, result) {
+    if(typeof result === 'undefined') {
         res.send('err')
     } else {
-        res.json(ret);
+        res.json(result);
         // res.send('ok')
     }
 };
