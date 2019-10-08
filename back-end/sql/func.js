@@ -6,16 +6,12 @@ const jwt = require('jwt-simple');
 module.exports = {
     connPool (sql, val, cb) {
         pool.getConnection((err, conn) => {
-            let q = conn.query(sql, val, (err, rows) => {
-
-                if (err) {
+            let query = conn.query(sql, val, (err, result) => {
+                /*if (err) {
                     console.log(err);
-                }
-
-                // console.log(a);
-
-                cb(err, rows);
-
+                }*/
+                if(err) return writeJson(res, {code:-2, message:'失败',errMsg: err})
+                cb(err, result);
                 conn.release();
             });
         });
