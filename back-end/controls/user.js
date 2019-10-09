@@ -1,6 +1,5 @@
 let $sql = require('../sql/sqlMap')
 let moment = require('moment')
-let bcrypt = require('bcryptjs')
 let $http = require('../sql/http')
 const jwt = require('jwt-simple')
 const express = require('express')
@@ -24,6 +23,8 @@ function formatData(row) {
   delete row.password
   return Object.assign({}, row, obj)
 }
+
+
 
 const user = {
   /* 用户登录 start */
@@ -57,57 +58,26 @@ const user = {
   /* 用户登出 start */
   logout (req, res) {
     let params = req.body
-    let userId = params.userId
-    let resultData = {}
-    let token=req.headers.token //获取前端请求头发送过来的token
-    let decoded = jwt.decode(token, app.get('jwtTokenSecret'))
-    if (!userId || decoded.iss!=userId) {
+    $http.userVerify(req, res, () => {
+      let expires = moment().add(100, 'milliseconds').valueOf()
+      let token = jwt.encode({
+        iss: params.userId,
+        exp: expires,
+      }, app.get('jwtTokenSecret'))
       resultData = {
-        code: 2,
-        message: 'userId参数有误'
+        code: 1,
+        message: '退出登录成功'
       }
-    } else {
-      if(decoded.exp <= Date.now()){
-        resultData = {
-          code: 20,
-          message: '登录过期'
-        }
-      }else{
-        let expires = moment().add(100, 'milliseconds').valueOf()
-        let token = jwt.encode({
-          iss: userId,
-          exp: expires,
-        }, app.get('jwtTokenSecret'))
-        resultData = {
-          code: 1,
-          message: '退出登录成功'
-        }
-      }
-    }
-    $http.writeJson(res, resultData)
-  }
+      $http.writeJson(res, resultData)
+    })
+
+  },
   /* 用户登出 end */
 
   add () {
     let params = req.body
-    let userId = params.userId
-    let resultData = {}
-    let token=req.headers.token //获取前端请求头发送过来的token
-    let decoded = jwt.decode(token, app.get('jwtTokenSecret'))
-    if (!userId || decoded.iss!=userId) {
-      resultData = {
-        code: 2,
-        message: '参数有误'
-      }
-    } else {
-      if(decoded.exp <= Date.now()){
-        resultData = {
-          code: 20,
-          message: '登录过期'
-        }
-      }else{
-      }
-    }
+    $http.userVerify(req, res, () => {
+    })
   }
 
 }
