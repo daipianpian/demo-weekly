@@ -10,8 +10,8 @@ module.exports = {
                 /*if (err) {
                     console.log(err);
                 }*/
-                if(err) return writeJson(res, {code:-2, message:'失败',errMsg: err})
-                cb(err, result);
+                if(err) writeJson(res, {code:-2, message:'失败',errMsg: err})
+                cb(result);
                 conn.release();
             });
         });

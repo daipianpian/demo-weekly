@@ -1,7 +1,7 @@
 let $sql = require('../sql/sqlMap')
 let moment = require('moment')
 let bcrypt = require('bcryptjs')
-let $func = require('../sql/func')
+let $http = require('../sql/http')
 const jwt = require('jwt-simple')
 const express = require('express')
 const app = express()
@@ -35,8 +35,8 @@ const user = {
     let sqlLogIn = $sql.user.login
     let arrayParams = [name, password]
 
-    $func.connPool(sqlLogIn, arrayParams, (err, result) => {
-        if (!result.length) return $func.writeJson(res, {code: 2, message:'用户或密码不正确'})
+    $http.connPool(sqlLogIn, arrayParams, result => {
+        if (!result.length) $http.writeJson(res, {code: 2, message:'用户或密码不正确'})
         let resultData = {}
         resultData.code = 1
         resultData.data = result[0]
@@ -49,7 +49,7 @@ const user = {
         }, app.get('jwtTokenSecret'))
         resultData.data.token = token
         resultData.msg = '登录成功'
-        $func.writeJson(res, resultData)
+        $http.writeJson(res, resultData)
     })
   },
   /* 用户登录 end */
@@ -84,9 +84,31 @@ const user = {
         }
       }
     }
-    $func.writeJson(res, resultData)
+    $http.writeJson(res, resultData)
   }
   /* 用户登出 end */
+
+  add () {
+    let params = req.body
+    let userId = params.userId
+    let resultData = {}
+    let token=req.headers.token //获取前端请求头发送过来的token
+    let decoded = jwt.decode(token, app.get('jwtTokenSecret'))
+    if (!userId || decoded.iss!=userId) {
+      resultData = {
+        code: 2,
+        message: '参数有误'
+      }
+    } else {
+      if(decoded.exp <= Date.now()){
+        resultData = {
+          code: 20,
+          message: '登录过期'
+        }
+      }else{
+      }
+    }
+  }
 
 }
 
