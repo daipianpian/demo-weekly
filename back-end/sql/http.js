@@ -10,11 +10,10 @@ const $http = {
     connPool (sql, val, cb) {
         pool.getConnection((err, conn) => {
             let query = conn.query(sql, val, (err, result) => {
-                /*if (err) {
+                if (err) {
                     console.log(err);
-                }*/
-                if(err) writeJson(res, {code:-2, message:'失败',errMsg: err})
-                cb(result);
+                }
+                cb(err, result);
                 conn.release();
             });
         });
