@@ -9,9 +9,9 @@ let router = express.Router();
 router.post(api.userLogin, user.login);
 router.post(api.userLogout, user.logout);
 router.post(api.userAdd, user.add);
-/*router.post(api.userUpdate, user.update);
-router.post(api.userChangeState, user.changeState);
-router.post(api.userDetail, user.detail);
+router.post(api.userUpdateInfo, user.updateInfo);
+router.post(api.userUpdateState, user.updateState);
+/*router.post(api.userDetail, user.detail);
 router.post(api.userList, user.list);*/
 
 // weekly-周报管理

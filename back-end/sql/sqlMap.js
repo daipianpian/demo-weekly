@@ -3,11 +3,11 @@ const sqlMap = {
     // 登陆
     login: 'select * from user where name = ? and password = ? and state != 0',
     // 新增用户
-    add: 'insert into user (name, password, email, create_time, update_time) values (?, ?, ?, ?, ?)',
+    add: 'insert IGNORE into user (name, password, email, create_time, update_time) values (?, ?, ?, ?, ?)',
     // 更新用户信息
-    update: 'update table user set password = ?, email = ?, update_time = ? where id = ? and state != 0',
+    updateInfo: 'update user set name = ?, password = ?, email = ?, update_time = ? where id = ? and id != 1 and state != 0',
     // 更改用户状态
-    updateState: 'update table user set state = ?, update_time = ? where id = ? and state != 0',
+    updateState: 'update table user set state = ?, update_time = ? where id = ? and id != 1 and state != 0',
     // 获取用户信息
     getDetail: 'select * from user where id = ? and state != 0',
     // 用户列表
@@ -17,7 +17,7 @@ const sqlMap = {
     // 新增周报
     add: 'insert into weekly (adminId, startTime, endTime, weekOfYear, thisWeekWork, nextWeekWork, collaboration, create_time, update_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     // 更新周报信息
-    update: 'update table weekly set startTime = ?, endTime = ?, weekOfYear = ?, thisWeekWork = ?, nextWeekWork = ?, collaboration = ?, update_time = ? where id = ? and state != 0',
+    updateInfo: 'update table weekly set startTime = ?, endTime = ?, weekOfYear = ?, thisWeekWork = ?, nextWeekWork = ?, collaboration = ?, update_time = ? where id = ? and state != 0',
     // 更新周报状态
     updateState: 'update table weekly set state = ?, update_time = ? where id = ? and state != 0',
     // 查询周报列表条数
