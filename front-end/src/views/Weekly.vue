@@ -17,13 +17,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="周报邮箱" prop="adminName">
-            <el-input type="text" v-model="searchKeywords.adminName" placeholder="请输入周报邮箱"></el-input>
+          <el-form-item label="用户ID" prop="adminId">
+            <el-input type="number" v-model.number="searchKeywords.adminId" placeholder="请输入周报ID"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="周报身份" prop="adminName">
-            <el-input type="text" v-model="searchKeywords.adminName" placeholder="请输入周报身份"></el-input>
+          <el-form-item label="开始时间" prop="adminId">
+            <el-input type="number" v-model.number="searchKeywords.adminId" placeholder="请输入周报ID"></el-input>
+          </el-form-item>
+          <el-form-item label="结束时间" prop="adminId">
+            <el-input type="number" v-model.number="searchKeywords.adminId" placeholder="请输入周报ID"></el-input>
           </el-form-item>
         </el-col>
       </el-row>

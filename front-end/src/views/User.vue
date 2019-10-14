@@ -21,11 +21,6 @@
             <el-input type="text" v-model="searchKeywords.adminName" placeholder="请输入管理员邮箱"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="管理员身份" prop="adminName">
-            <el-input type="text" v-model="searchKeywords.adminName" placeholder="请输入管理员身份"></el-input>
-          </el-form-item>
-        </el-col>
       </el-row>
       <el-row>
         <el-form-item>

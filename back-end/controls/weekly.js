@@ -1,270 +1,190 @@
-const db = require('../config/db');
-const jwt = require('jwt-simple');
-const express = require('express');
-const router = express.Router();
-const mysql = require('mysql');
-const $sql = require('../sql/sqlMap');
-const moment = require('moment');
-const app = express();
-app.set('jwtTokenSecret', 'YOUR_SECRET_STRING');
+const $sql = require('../sql/sqlMap')
+const $http = require('../sql/http')
+const $time = require('../utils/time')
 
-// 连接数据库
-const conn = mysql.createConnection(db);
-conn.connect();
-const jsonWrite = function(res, result) {
-    if(typeof result === 'undefined') {
-        res.send('err')
-    } else {
-        res.json(result);
-        // res.send('ok')
+function formatData(rows) {
+  return rows.map(row => {
+    if(row.create_time) {
+      row.create_time = $time.formatTime(row.create_time)
     }
-};
-
-
-// 用户登录
-router.post('/logIn', (req,res) => {
-  let params = req.body
-  let name = params.name
-  let password = params.password
-  let objParams = [name, password]
-
-  let logIn = $sql.user.logIn
-
-  conn.query(logIn, objParams, function(err, result) {
-    let resultParams = {}
-    if(err) {
-      resultParams = {
-          code: -2,
-          message: '查询失败',
-          errMessage: err
-      }
-      return jsonWrite(res, resultParams)
+    if(row.update_time) {
+      row.update_time = $time.formatTime(row.update_time)
     }
-
-    if(result.length === 0) {
-      resultParams = {
-          code: 2,
-          data: {},
-          message: '用户或密码不正确'
-      }
-    }else{
-      let resultData = result[0]
-       /**设置移动端登录连续30分钟过后过期**/
-      let expires = moment().add(30, 'minutes').valueOf();
-      // let expires = moment().add(20, 'seconds').valueOf();
-      let token = jwt.encode({
-        iss: result.id,
-        exp: expires,
-      }, app.get('jwtTokenSecret'));
-
-      resultParams = {
-          code: 1,
-          data: {
-            id: resultData.id,
-            name: resultData.name,
-            email: resultData.email,
-            type: resultData.type,
-            state: resultData.state,
-            token: token
-          },
-          message: '登陆成功'
-      }
-
+    if(row.startTime) {
+      row.startTime = $time.formatYmd(row.startTime)
     }
-
-
-    return jsonWrite(res, resultParams)
-
-
+    if(row.endTime) {
+      row.endTime = $time.formatYmd(row.endTime)
+    }
+    return Object.assign({}, row)
   })
+}
 
-})
-
-// 用户登出
-router.post('/logOut', (req,res) => {
-  let params = req.body
-  let userId = params.userId
-  let resultParams = {}
-  let token=req.headers.token //获取前端请求头发送过来的token
-  let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
-  if (decoded.exp <= Date.now()) {
-    resultParams = {
-        code: 20,
-        message: '登录过期'
-    }
-  } else {
-    if(!userId){
-      resultParams = {
-        code: 2,
-        message: 'userId参数有误'
-      }
-    }else{
-      let expires = moment().add(100, 'milliseconds').valueOf();
-      let token = jwt.encode({
-        iss: userId,
-        exp: expires,
-      }, app.get('jwtTokenSecret'));
-      resultParams = {
-        code: 1,
-        message: '退出登录成功'
-      }
-    }
-  }
-  return jsonWrite(res, resultParams)
-
-})
-
-// 周报列表
-router.post('/queryWeeklyList', (req,res) => {
-  let token=req.headers.token //获取前端请求头发送过来的token
-  let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
-  if (decoded.exp <= Date.now()) {
-    let resultParams = {
-        code: 20,
-        message: '登录过期'
-    }
-    return jsonWrite(res, resultParams)
-  } else {
+const weekly = {
+  /*添加周报 start*/
+  add (req, res) {
     let params = req.body
-    let userId = params.userId
-    if(!userId){
-      let resultParams = {
-          code: 2,
-          message: 'userId参数有误'
+    $http.userVerify(req, res, () => {
+      let curTime = $time.formatTime()
+      let userId = params.userId
+      let startTime = params.startTime
+      let endTime = params.endTime
+      let title = params.title
+      let thisWeekWork = params.thisWeekWork
+      let nextWeekWork = params.nextWeekWork
+      let collaboration = params.collaboration
+      let create_time = curTime
+      let update_time = curTime
+      if(!startTime || !endTime || !title || !thisWeekWork || !nextWeekWork) $http.writeJson(res, {code: 2, message:'参数有误'})
+      else {
+        let sql = $sql.weekly.add
+        let arrayParams = [userId, startTime, endTime, title, thisWeekWork, nextWeekWork, collaboration, create_time, update_time]
+        $http.connPool(sql, arrayParams, (err, result) => {
+          if(err) return $http.writeJson(res, {code:-2, message:'失败',errMsg: err})
+          if(result.affectedRows != 1) return $http.writeJson(res, {code: 2, message:'添加失败'})
+          return $http.writeJson(res, {code: 1, message: '添加周报成功'})
+        })
       }
-      return jsonWrite(res, resultParams)
-    }else{
-      let selectWeeklyCount = $sql.weekly.selectWeeklyCount
-      let selectWeeklyList = $sql.weekly.selectWeeklyList
-      // let keywords = req.body.keywords
-      let userType = req.body.userType
-      let startTime = req.body.startTime
-      let endTime = req.body.endTime
+    })
+  },
+  /*添加周报 end*/
 
+  /*更新周报信息 start*/
+  updateInfo (req, res) {
+    let params = req.body
+    $http.userVerify(req, res, () => {
+      let curTime = $time.formatTime()
+      let id = params.id
+      let startTime = params.startTime
+      let endTime = params.endTime
+      let title = params.title
+      let thisWeekWork = params.thisWeekWork
+      let nextWeekWork = params.nextWeekWork
+      let collaboration = params.collaboration
+      let update_time = curTime
+      if(!id || !startTime || !endTime || !title || !thisWeekWork || !nextWeekWork) {
+        $http.writeJson(res, {code: 2, message:'参数有误'})
+      } else {
+        let sql = $sql.weekly.updateInfo
+        let arrayParams = [startTime, endTime, title, thisWeekWork, nextWeekWork, collaboration, update_time, id]
+        $http.connPool(sql, arrayParams, (err, result) => {
+          if(err) return $http.writeJson(res, {code:-2, message:'失败',errMsg: err})
+          if(result.affectedRows != 1) return $http.writeJson(res, {code: 2, message:'更新失败'})
+          return $http.writeJson(res, {code: 1, data: result, message: '更新周报成功'})
+        })
+      }
+    })
+  },
+  /*更新周报信息 end*/
+
+  /*更新周报状态 start*/
+  updateState (req, res) {
+    let params = req.body
+    $http.userVerify(req, res, () => {
+      let curTime = $time.formatTime()
+      let id = params.id
+      let state = params.state
+      let update_time = curTime
+      if(!id) {$http.writeJson(res, {code: 2, message:'参数有误'})}
+      else {
+        let sql = $sql.weekly.updateState
+        let arrayParams = [state, update_time, id]
+        $http.connPool(sql, arrayParams, (err, result) => {
+          if(err) return $http.writeJson(res, {code:-2, message:'失败',errMsg: err})
+          if(result.affectedRows != 1) return $http.writeJson(res, {code: 2, data: result, message:'更新周报状态失败'})
+          return $http.writeJson(res, {code: 1, message: '更新周报状态成功'})
+        })
+      }
+    })
+  },
+  /*更新周报状态 end*/
+
+  /*获取周报信息 start*/
+  detail (req, res) {
+    let params = req.body
+    $http.userVerify(req, res, () => {
+      let userId = params.userId
+      let id = params.id
+      if(!id) {$http.writeJson(res, {code: 2, message:'参数有误'})}
+      else {
+        let sql = $sql.weekly.getDetail
+        let arrayParams = [id]
+        $http.connPool(sql, arrayParams, (err, result) => {
+          if(err) {return $http.writeJson(res, {code:-2, message:'失败',errMsg: err})}
+          if(result.length != 1) {
+            return $http.writeJson(res, {code: 2, message:'获取周报信息不存在'})
+          } else {
+            let resultData = formatData(result)[0]
+            return $http.writeJson(res, {code: 1, data: resultData, message: '获取周报信息成功'})
+          }
+        })
+      }
+    })
+  },
+  /*获取周报信息 end*/  
+
+  /*获取周报列表 start*/
+  list (req, res) {
+    let params = req.body
+    $http.userVerify(req, res, () => {
+      let sqlSelectTotal = $sql.weekly.selectTotal
+      let sqlSelectList= $sql.weekly.selectList
+      let userId = params.userId
+      let searchId = params.searchId
+      let searchUserId = params.searchUserId
+      let searchTitle = params.searchTitle
+      let searchStartTime = params.searchStartTime
+      let searchEndTime = params.searchEndTime
+
+      params.pageSize = !params.pageSize ? 10 : params.pageSize
       // 分页查询入参 start
       let limitFirst = (params.pageNum-1)*params.pageSize;
       let limitLast = params.pageSize;
       // 分页查询入参 end
 
-      let objParams = []
-      let totalCount = 0
-      let selectSql = ''
+      if(userId==1 && searchUserId){
+        sqlSelectTotal += " and userId = "+searchUserId
+        sqlSelectList += " and userId = "+searchUserId
+      }else{
+        sqlSelectTotal += " and userId = "+userId
+        sqlSelectList += " and userId = "+userId
+      }
+      if(searchId){
+        sqlSelectTotal += " and weekly.id = "+searchId
+        sqlSelectList += " and weekly.id = "+searchId
+      }
+      if(searchTitle){
+        sqlSelectTotal += " and weekly.title like '%"+searchTitle+"%'"
+        sqlSelectList += " and weekly.title like '%"+searchTitle+"%'"
+      }
+      if(searchStartTime){
+        sqlSelectTotal += " and weekly.create_time >= "+searchStartTime
+        sqlSelectList += " and weekly.create_time >= "+searchStartTime
+      }
+      if(searchEndTime){
+        sqlSelectTotal += " and weekly.create_time <= "+searchEndTime
+        sqlSelectList += " and weekly.create_time <= "+searchEndTime
+      }
 
-      if(userType!=1){
-        objParams.push(userId)
-        selectSql += " and userId = ?"
-      }
-      if(startTime){
-        objParams.push(startTime)
-        selectSql += " and weekly.create_time >= ?"
-      }
-      if(endTime){
-        objParams.push(endTime)
-        selectSql += " and weekly.create_time <= ?"
-      }
-      selectSql += " order by weekly.id desc"; // id倒序排
+      let sql= sqlSelectTotal + '; ' + sqlSelectList
+      sql += " order by weekly.id desc limit ?,?"; // id倒序排
+      let arrayParams = [limitFirst, limitLast]
 
-      let objSelectCount = selectWeeklyCount+selectSql
-      conn.query(objSelectCount, objParams, function(err, result) {
-        let resultParams = {}
+      $http.connPool(sql, arrayParams, (err, result) => {
         if(err) {
-          resultParams = {
-              code: -2,
-              message: '查询失败',
-              errMessage: err
-          }
-          return jsonWrite(res, resultParams)
-        }
-        if(result){
-          totalCount = result.length===0 ? 0 : result[0].totalCount
-          objParams.push(limitFirst, limitLast)
-          selectSql+= " limit ?,?"; // 分页查询
-          let objSelectList = selectWeeklyList+selectSql
-          conn.query(objSelectList, objParams, function(err, subResult) {
-            let resultParams = {}
-            if(err) {
-              resultParams = {
-                  code: -2,
-                  message: '查询失败',
-                  errMessage: err
-              }
-              return jsonWrite(res, resultParams)
-            }
-            if(subResult){
-              let resultData = {
-                list: subResult.length===0 ? [] : subResult,
-                totalCount: totalCount
-              }
-              resultParams = {
-                code: 1,
-                data: resultData,
-                message: '成功'
-              } 
-              return jsonWrite(res, resultParams)
-            }
-            
-
-          })
+          return $http.writeJson(res, {code:-2, message:'失败',errMsg: err})
+        } else {
+          let resultData = {}
+          resultData.totalCount = result[0][0]['totalCount']
+          resultData.list = formatData(result[1])
+          return $http.writeJson(res, {code: 1, data: resultData, message: '获取周报列表成功'})
         }
         
-
       })
+    })
+  },
+  /*获取周报列表 end*/
 
+}
 
-
-    }
-
-
-  }
-
-})
-
-// 查询周报详情
-router.post('/queryWeeklyDetail', (req,res) => {
-  let token=req.headers.token //获取前端请求头发送过来的token
-  let decoded = jwt.decode(token, app.get('jwtTokenSecret'));
-  if (decoded.exp <= Date.now()) {
-    let resultParams = {
-        code: 20,
-        message: '登录过期'
-    }
-    return jsonWrite(res, resultParams)
-  } else {
-    let params = req.body
-    let weeklyId = params.weeklyId
-    let userId = params.userId
-    
-    if(!weeklyId || !userId){
-      resultParams = {
-        code: 2,
-        message: '参数有误'
-      }
-      return jsonWrite(res, resultParams)
-    }else{
-      let selectWeeklyDetail = $sql.weekly.selectWeeklyDetail
-      let objParams = [weeklyId, userId]
-      conn.query(selectWeeklyDetail, objParams, function(err, result) {
-        let resultParams = {}
-        if(err) {
-          resultParams = {
-              code: -2,
-              message: '查询失败',
-              errMessage: err
-          }
-          return jsonWrite(res, resultParams)
-        }
-        if(result){
-          let resultData = result.length===0 ? {} : result[0]
-          resultParams = {
-            code: 1,
-            data: resultData,
-            message: '成功'
-          } 
-          return jsonWrite(res, resultParams)
-        }
-      })
-    }
-  }
-})
-
-module.exports = router
+module.exports = weekly
