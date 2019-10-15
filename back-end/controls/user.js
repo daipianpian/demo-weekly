@@ -16,6 +16,17 @@ function formatData(rows) {
     if(row.update_time) {
       row.update_time = $time.formatTime(row.update_time)
     }
+    let type = row.type
+    if(type){
+      switch(type) {
+        case 1:
+          row.role = '管理员'
+          break
+        case 2:
+          row.role = '普通用户'
+          break
+      }
+    }
     return Object.assign({}, row)
   })
 }
@@ -134,10 +145,11 @@ const user = {
     $http.userVerify(req, res, () => {
       let curTime = $time.formatTime()
       let id = params.id
-      let state = params.state
+      let state = !params.state? '0' : params.state
       let update_time = curTime
-      if(!id) {$http.writeJson(res, {code: 2, message:'参数有误'})}
-      else {
+      if(!id) {
+        $http.writeJson(res, {code: 2, message:'参数有误'})
+      } else {
         let sql = $sql.user.updateState
         let arrayParams = [state, update_time, id]
         $http.connPool(sql, arrayParams, (err, result) => {
@@ -156,8 +168,9 @@ const user = {
     $http.userVerify(req, res, () => {
       let userId = params.userId
       let id = params.id
-      if(!id) {$http.writeJson(res, {code: 2, message:'参数有误'})}
-      else {
+      if(!id) {
+        $http.writeJson(res, {code: 2, message:'参数有误'})
+      } else {
         let sql = $sql.user.getDetail
         let arrayParams = [id]
         $http.connPool(sql, arrayParams, (err, result) => {
@@ -166,9 +179,10 @@ const user = {
             return $http.writeJson(res, {code: 2, message:'获取用户信息不存在'})
           } else {
             let resultData = formatData(result)[0]
-            if((userId == 1 && userId == id) || userId!=1){
+            /*if((userId == 1 && userId == id) || userId!=1){
               delete resultData.password
-            }
+            }*/
+            /*delete resultData.password*/
             return $http.writeJson(res, {code: 1, data: resultData, message: '获取用户信息成功'})
           }
         })
@@ -181,47 +195,57 @@ const user = {
   list (req, res) {
     let params = req.body
     $http.userVerify(req, res, () => {
-      let sqlSelectTotal = $sql.weekly.selectTotal
-      let sqlSelectList= $sql.weekly.selectList
+      let sqlSelectTotal = $sql.user.selectTotal
+      let sqlSelectList= $sql.user.selectList
       let userId = params.userId
       let searchId = params.searchId
       let searchName = params.searchName
       let searchEmail = params.searchEmail
+      let pageNum = params.pageNum
+      let pageSize = !params.pageSize ? 10 : params.pageSize
 
-      params.pageSize = !params.pageSize ? 10 : params.pageSize
-      // 分页查询入参 start
-      let limitFirst = (params.pageNum-1)*params.pageSize;
-      let limitLast = params.pageSize;
-      // 分页查询入参 end
-      
-      if(searchId){
-        sqlSelectTotal += " and id = "+searchId
-        sqlSelectList += " and id = "+searchId
-      }
-
-      if(searchName){
-        sqlSelectTotal += " and name like '%"+searchName+"%'"
-        sqlSelectList += " and name like '%"+searchName+"%'"
-      }
-
-      if(searchEmail){
-        sqlSelectTotal += " and email like '%"+searchEmail+"%'"
-        sqlSelectList += " and email like '%"+searchEmail+"%'"
-      }
-      let sql= sqlSelectTotal + '; ' + sqlSelectList
-      sql += " order by id desc limit ?,?"; // id倒序排
-      let arrayParams = [limitFirst, limitLast]
-      
-      $http.connPool(sql, arrayParams, (err, result) => {
-        if(err) {
-          return $http.writeJson(res, {code:-2, message:'失败',errMsg: err})
+      if(!pageNum) {
+        $http.writeJson(res, {code: 2, message:'参数有误'})
+      } else {
+        // 分页查询入参 start
+        let limitFirst = (pageNum-1)*pageSize;
+        let limitLast = pageSize;
+        // 分页查询入参 end
+        if(userId!=1){
+          sqlSelectTotal += " and id = "+userId
+          sqlSelectList += " and id = "+userId
         }else{
-          let resultData = {}
-          resultData.totalCount = result[0][0]['totalCount']
-          resultData.list = formatData(result[1])
-          return $http.writeJson(res, {code: 1, data: resultData, message: '获取用户列表成功'})
-        } 
-      })
+          if(searchId) {
+            sqlSelectTotal += " and id = "+searchId
+            sqlSelectList += " and id = "+searchId
+          }
+        }
+
+        if(searchName){
+          sqlSelectTotal += " and name like '%"+searchName+"%'"
+          sqlSelectList += " and name like '%"+searchName+"%'"
+        }
+
+        if(searchEmail){
+          sqlSelectTotal += " and email like '%"+searchEmail+"%'"
+          sqlSelectList += " and email like '%"+searchEmail+"%'"
+        }
+        let sql= sqlSelectTotal + '; ' + sqlSelectList
+        sql += " order by id desc limit ?,?"; // id倒序排
+        let arrayParams = [limitFirst, limitLast]
+        
+        $http.connPool(sql, arrayParams, (err, result) => {
+          if(err) {
+            return $http.writeJson(res, {code:-2, message:'失败'})
+          }else{
+            let resultData = {}
+            resultData.totalCount = result[0][0]['totalCount']
+            resultData.list = formatData(result[1])
+            return $http.writeJson(res, {code: 1, data: resultData, message: '获取用户列表成功'})
+          } 
+        })
+      }
+
     })
   },
   /*获取用户列表 end*/

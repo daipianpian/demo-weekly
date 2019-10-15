@@ -1,37 +1,52 @@
 <template>
   <div class="login-container">
-    <el-form class="login-main sub-center-center" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px">
+    <el-form class="login-main sub-center-center" :model="formData" :rules="formRules" ref="formData" label-position="left" label-width="0px">
       <h3 class="title">周报管理系统登录</h3>
-      <el-form-item prop="account">
-        <el-input type="text" v-model="ruleForm.account" auto-complete="off" placeholder="账号"></el-input>
+      <el-form-item prop="name">
+        <el-input type="text" v-model="formData.name" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="ruleForm.password" auto-complete="off" placeholder="密码"></el-input>
+        <el-input type="password" v-model="formData.password" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <el-form-item class="btn-box">
-        <el-button type="primary" @click="submitLogin('ruleForm')">登录</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button type="primary" @click="submitLogin('formData')">登录</el-button>
+        <el-button @click="resetForm('formData')">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import { userLogin } from '../config/interface'
 export default {
   data () {
+    const validate = (rule, value, callback) => {
+      const reg = /^[0-9a-zA-Z]*$/g
+      if (!value) {
+        callback(new Error('请输入内容'))
+      } else if (value.length < 3 || value.length > 6) {
+        callback(new Error('内容长度需在 3 到 6 个字符'))
+      } else if (!reg.test(value)) {
+        callback(new Error('内容需为字母或数字'))
+      } else {
+        callback()
+      }
+    }
     return {
-      ruleForm: {
-        account: '',
-        password: ''
+      formData: {
+        name: null,
+        password: null
       },
-      rules: {
-        account: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+      formRules: {
+        name: [
+          { validator: validate, trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { validator: validate, trigger: 'blur' }
         ]
+      },
+      reqFlag: {
+        login: true
       }
     }
   },
@@ -39,12 +54,28 @@ export default {
     submitLogin (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // password: md5(this.userInfo.password+encryInfo)
-          this.$message({
-            message: '登陆成功',
-            type: 'success',
-            duration: 2000
-          })
+          const url = userLogin
+          if (this.reqFlag.login) {
+            this.reqFlag.login = false
+            let params = {
+              name: this.formData.name,
+              password: this.$md5(this.formData.password)
+            }
+            this.$http(url, params)
+            .then(res => {
+              if (res.code == 1) {
+                let data = res.data
+                localStorage.setItem('userInfo', JSON.stringify(data))
+                this.$store.dispatch('saveUserInfo', data)
+                this.$common.toast('登陆成功', 'success', false)
+                this.$router.push({
+                  path: '/home/user',
+                  query: {}
+                })
+              }
+              this.reqFlag.login = true
+            })
+          }
         } else {
           console.log('error submit!!')
           return false

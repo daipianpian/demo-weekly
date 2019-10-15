@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import common from './assets/js/common.js'
+import { http, baseURL } from './config/http.js'
 import vueQuillEditor from 'vue-quill-editor' // 引入富文本工具
 // require styles 引入样式
 import 'quill/dist/quill.core.css'
@@ -23,6 +24,8 @@ Vue.use(vueQuillEditor)
 const bus = new Vue()
 window.bus = bus
 Vue.prototype.$common = common
+Vue.prototype.$http = http
+Vue.prototype.$baseURL = baseURL
 Vue.prototype.$moment = moment
 Vue.prototype.$md5 = md5
 

@@ -4,12 +4,12 @@
     <el-header class="flex">
       <div class="logo flex-item"><i class="el-icon-date"></i> 工作周报</div>
       <div class="user-info">
-        <el-dropdown trigger="click">
+        <el-dropdown trigger="click" @command="handleCommand">
           <el-button type="primary">
-            <i class="el-icon-user-solid el-icon--left"></i>admin
+            <i class="el-icon-user-solid el-icon--left"></i>{{userInfo.name}}
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click="loginOut()">退出</el-dropdown-item>
+            <el-dropdown-item command="loginOut">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -43,18 +43,25 @@
 </template>
 
 <script>
+import { userLogout } from '../config/interface'
 export default {
   data () {
     return {
       menuList: this.$store.state.menuList,
-      activePath: null
+      activePath: null,
+      reqFlag: {
+        logout: true
+      }
     }
   },
   components: {
 
   },
   computed: {
-
+    userInfo: function () {
+      let userInfo = this.$store.state.userInfo
+      return userInfo
+    }
   },
   watch: {
     '$route': function (to, from) {
@@ -62,11 +69,35 @@ export default {
     }
   },
   created () {
-    console.log('$route.path==' + this.$route.path)
     this.activePath = this.$route.meta.pagePath
   },
   methods: {
-
+    handleCommand (command) {
+      if (command == 'loginOut') {
+        this.loginOut()
+      }
+    },
+    // 登出
+    loginOut () {
+      const url = userLogout
+      if (this.reqFlag.logout) {
+        this.reqFlag.logout = false
+        let params = {}
+        this.$http(url, params)
+        .then(res => {
+          if (res.code == 1) {
+            localStorage.clear()
+            this.$store.dispatch('saveUserInfo', {})
+            this.$common.toast('登出成功', 'success', false)
+            this.$router.push({
+              path: '/',
+              query: {}
+            })
+          }
+          this.reqFlag.logout = true
+        })
+      }
+    }
   }
 }
 </script>
@@ -82,5 +113,7 @@ export default {
     .el-menu-item{font-size: 16px;}
   }
 }
-.el-dropdown-menu__item{padding: 0 40px;}
+.el-dropdown-menu__item{padding: 0 40px;
+  span{display: block; width:100%; height: 100%;}
+}
 </style>

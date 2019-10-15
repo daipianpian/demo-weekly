@@ -108,10 +108,10 @@ export default {
       console.log('formData.weekOfYear==' + weekOfYear)
 
       let yearNum = this.$moment(weekOfYear).year()
-      console.log('yearNum===' + yearNum)
+      console.log('yearNum==' + yearNum)
 
       let weekNum = this.$moment(weekOfYear).week()
-      console.log('weekNum===' + weekNum)
+      console.log('weekNum==' + weekNum)
 
       // this.changeShowFlag()
     },

@@ -65,7 +65,13 @@ input[type="number"]{
   .content-header{margin-bottom: 20px;}
 }
 
-/*新增或者编辑的对话框样式 start*/
+/* Pagination 分页 */
+.el-pagination{text-align: right; margin-top: 10px;}
+
+/* 按钮 */
+.el-button--danger.is-plain:focus{color: #F56C6C;background: #fef0f0;border-color: #fbc4c4;}
+
+/* 新增或者编辑的对话框样式 */
 .el-dialog{
   width: 800px;
   &.dialog-medium{width: 700px;}

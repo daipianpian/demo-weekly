@@ -13,7 +13,7 @@ const sqlMap = {
     // 查询周报列表条数
     selectTotal: 'select count(*) as totalCount from user where state != 0',
     // 用户列表
-    selectList: 'select id, name, email, type, create_time, state from user where state != 0'
+    selectList: 'select id, name, email, type, create_time, update_time, state from user where state != 0'
   },
   weekly: {
     // 新增周报
