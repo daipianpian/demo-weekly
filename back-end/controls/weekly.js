@@ -130,6 +130,7 @@ const weekly = {
       let sqlSelectTotal = $sql.weekly.selectTotal
       let sqlSelectList= $sql.weekly.selectList
       let userId = params.userId
+      let userType = params.userType
       let searchId = params.searchId
       let searchUserId = params.searchUserId
       let searchTitle = params.searchTitle
@@ -142,7 +143,7 @@ const weekly = {
       let limitLast = params.pageSize;
       // 分页查询入参 end
 
-      if(userId==1 && searchUserId){
+      if(userType==1 && searchUserId){
         sqlSelectTotal += " and userId = "+searchUserId
         sqlSelectList += " and userId = "+searchUserId
       }else{

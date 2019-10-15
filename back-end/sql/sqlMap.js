@@ -5,9 +5,9 @@ const sqlMap = {
     // 新增用户
     add: 'insert IGNORE into user (name, password, email, create_time, update_time) values (?, ?, ?, ?, ?)',
     // 更新用户信息
-    updateInfo: 'update user set name = ?, password = ?, email = ?, update_time = ? where id = ? and id != 1 and state != 0',
+    updateInfo: 'update user set name = ?, password = ?, email = ?, update_time = ? where id = ? and type != 1 and state != 0',
     // 更改用户状态
-    updateState: 'update user set state = ?, update_time = ? where id = ? and id != 1 and state != 0',
+    updateState: 'update user set state = ?, update_time = ? where id = ? and type != 1 and state != 0',
     // 获取用户信息
     getDetail: 'select * from user where id = ? and state != 0',
     // 查询周报列表条数

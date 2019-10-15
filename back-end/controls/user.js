@@ -198,6 +198,7 @@ const user = {
       let sqlSelectTotal = $sql.user.selectTotal
       let sqlSelectList= $sql.user.selectList
       let userId = params.userId
+      let userType = params.userType
       let searchId = params.searchId
       let searchName = params.searchName
       let searchEmail = params.searchEmail
@@ -211,7 +212,7 @@ const user = {
         let limitFirst = (pageNum-1)*pageSize;
         let limitLast = pageSize;
         // 分页查询入参 end
-        if(userId!=1){
+        if(userType!=1){
           sqlSelectTotal += " and id = "+userId
           sqlSelectList += " and id = "+userId
         }else{

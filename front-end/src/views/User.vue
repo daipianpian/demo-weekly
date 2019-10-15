@@ -10,10 +10,6 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="管理员名称" prop="name">
-            <!-- <el-select v-model="keywords.name" placeholder="请选择管理员名称">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select> -->
             <el-input type="text" v-model="keywords.name" placeholder="请输入管理员名称"></el-input>
           </el-form-item>
         </el-col>
@@ -37,7 +33,7 @@
     <!-- 分割线 end -->
 
     <div class="main-content">
-      <div class="content-header">
+      <div v-if="userPower" class="content-header">
         <el-button type="primary" size="medium" @click="handleAdd">新增管理员</el-button>
       </div>
       <el-table v-loading="!this.reqFlag.search" :data="tableData" header-row-class-name="table-header" border style="width: 100%">
@@ -59,16 +55,10 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column v-if="userPower" label="操作" align="center" width="200">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.row.id)">编辑</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              plain
-              @click="handleDelete(scope.row.id)">删除</el-button>
+        <el-table-column label="操作" align="center" width="200">
+          <template v-if="scope.row.type!=1" slot-scope="scope">
+            <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+            <el-button v-if="userPower" size="mini" type="danger" plain @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -135,6 +125,10 @@ export default {
     Edit
   },
   computed: {
+    userType: function () {
+      let userType = this.$store.state.userInfo.type
+      return userType
+    },
     userPower: function () {
       let userType = this.$store.state.userInfo.type
       return userType == 1
@@ -152,6 +146,7 @@ export default {
           searchId: this.keywords.id,
           searchName: this.keywords.name,
           searchEmail: this.keywords.email,
+          userType: this.userType,
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }
