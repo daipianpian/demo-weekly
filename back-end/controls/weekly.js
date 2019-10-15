@@ -83,7 +83,7 @@ const weekly = {
     $http.userVerify(req, res, () => {
       let curTime = $time.formatTime()
       let id = params.id
-      let state = params.state
+      let state = !params.state ? '0' : params.state
       let update_time = curTime
       if(!id) {$http.writeJson(res, {code: 2, message:'参数有误'})}
       else {
@@ -121,7 +121,7 @@ const weekly = {
       }
     })
   },
-  /*获取周报信息 end*/  
+  /*获取周报信息 end*/
 
   /*获取周报列表 start*/
   list (req, res) {
@@ -180,7 +180,6 @@ const weekly = {
           resultData.list = formatData(result[1])
           return $http.writeJson(res, {code: 1, data: resultData, message: '获取周报列表成功'})
         }
-        
       })
     })
   },

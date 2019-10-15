@@ -145,7 +145,7 @@ const user = {
     $http.userVerify(req, res, () => {
       let curTime = $time.formatTime()
       let id = params.id
-      let state = !params.state? '0' : params.state
+      let state = !params.state ? '0' : params.state
       let update_time = curTime
       if(!id) {
         $http.writeJson(res, {code: 2, message:'参数有误'})

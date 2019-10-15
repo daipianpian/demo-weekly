@@ -56,9 +56,9 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="200">
-          <template v-if="scope.row.type!=1" slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
-            <el-button v-if="userPower" size="mini" type="danger" plain @click="handleDelete(scope.row.id)">删除</el-button>
+          <template slot-scope="scope">
+            <el-button :disabled="scope.row.type==1" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
+            <el-button v-if="userPower" :disabled="scope.row.type==1" size="mini" type="danger" plain @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
