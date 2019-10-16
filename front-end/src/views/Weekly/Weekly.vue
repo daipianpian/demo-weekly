@@ -15,8 +15,7 @@
         </el-col>
         <el-col v-if="userPower" :span="6">
           <el-form-item label="创建者" prop="userId">
-            <!-- <el-input type="number" v-model.number="keywords.userId" placeholder="请输入周报ID"></el-input> -->
-            <el-select v-model="value" placeholder="请选择">
+            <el-select v-model="keywords.userId" placeholder="请选择">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
@@ -129,7 +128,7 @@ export default {
     }
   },
   created () {
-    
+    this.init()
   },
   methods: {
     // 初始化
@@ -150,7 +149,19 @@ export default {
         .then(res => {
           if (res.code == 1) {
             let data = res.data
-            this.userList = data.list
+            let list = data.list
+            let objList = []
+            if (list.length > 1) {
+              for (let value of list) {
+                let obj = {
+                  id: value.id,
+                  name: value.name
+                }
+                objList.push(obj)
+              }
+            }
+            objList.unshift({ 'id': null, 'name': '全部' })
+            this.userList = objList
           }
           this.reqFlag.user = true
         })

@@ -143,13 +143,16 @@ const weekly = {
       let limitLast = params.pageSize;
       // 分页查询入参 end
 
-      if(userType==1 && searchUserId){
-        sqlSelectTotal += " and userId = "+searchUserId
-        sqlSelectList += " and userId = "+searchUserId
-      }else{
+      if(userType!=1){
         sqlSelectTotal += " and userId = "+userId
         sqlSelectList += " and userId = "+userId
+      }else{
+        if(searchUserId) {
+          sqlSelectTotal += " and userId = "+searchUserId
+          sqlSelectList += " and userId = "+searchUserId
+        }
       }
+
       if(searchId){
         sqlSelectTotal += " and weekly.id = "+searchId
         sqlSelectList += " and weekly.id = "+searchId
