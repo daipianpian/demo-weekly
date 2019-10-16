@@ -1,4 +1,5 @@
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
+import router from '../../router'
 
 const commonFn = {
 	toast (str, type, showClose, onCloseFn) {
@@ -17,6 +18,7 @@ const commonFn = {
 	},
 	// 刷新当前页面
 	shallowRefresh (name) {
+		console.log('shallowRefresh name=' + name)
 		router.replace({
 			path: '/refresh',
 			query: {
@@ -28,7 +30,7 @@ const commonFn = {
 	msgBox (type, title, message, confirm, cancel) {
 		switch (type) {
 			case 'alert':
-				bus.$alert(message, title, {
+				MessageBox.$alert(message, title, {
 						dangerouslyUseHTMLString: true
 					})
 					.then(() => {
@@ -39,7 +41,7 @@ const commonFn = {
 					})
 				break
 			case 'confirm':
-				bus.$confirm(message, title, {
+				MessageBox.$confirm(message, title, {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					cancelButtonClass: 'messagebox-cancel-button',
@@ -47,7 +49,7 @@ const commonFn = {
 					type: 'warning'
 				}).then(() => {
 					if (!confirm) {
-						bus.$message({
+						MessageBox.$message({
 							type: 'success',
 							message: title + '失败!',
 							duration: 1500
@@ -57,7 +59,7 @@ const commonFn = {
 					}
 				}).catch(() => {
 					if (!cancel) {
-						bus.$message({
+						MessageBox.$message({
 							type: 'info',
 							message: '已取消' + title,
 							duration: 1500
@@ -70,11 +72,10 @@ const commonFn = {
 		}
 	},
 	// 去除两端的空白
-	trim(text) {
+	trim (text) {
 		const rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g
 		return text == null ? null : (text + '').replace(rtrim, '')
 	}
 }
-
 
 export default commonFn

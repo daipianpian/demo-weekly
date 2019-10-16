@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './views/Login.vue'
 
 Vue.use(Router)
 
@@ -16,7 +15,7 @@ export default new Router({
     {
       path: '/',
       name: 'login',
-      component: Login,
+      component: () => import('./views/Login.vue'),
       meta: { pagePath: '/' }
     },
     {
@@ -28,22 +27,39 @@ export default new Router({
         {
           path: 'user',
           name: 'user',
-          component: () => import(/* webpackChunkName: "home" */ './views/User.vue'),
+          component: () => import(/* webpackChunkName: "user" */ './views/User/User.vue'),
           meta: { pagePath: '/home/user' }
         },
         {
           path: 'weekly',
           name: 'weekly',
-          component: () => import(/* webpackChunkName: "home" */ './views/Weekly.vue'),
+          component: () => import(/* webpackChunkName: "weekly" */ './views/Weekly/Weekly.vue'),
           meta: { pagePath: '/home/weekly' }
         },
         {
-          path: 'weeklydetails',
-          name: 'weeklydetails',
-          component: () => import(/* webpackChunkName: "home" */ './views/WeeklyDetails.vue'),
+          path: 'weeklyadd',
+          name: 'weeklyadd',
+          component: () => import(/* webpackChunkName: "weekly" */ './views/Weekly/childViews/WeeklyAdd.vue'),
+          meta: { pagePath: '/home/weekly' }
+        },
+        {
+          path: 'weeklyedit',
+          name: 'weeklyedit',
+          component: () => import(/* webpackChunkName: "weekly" */ './views/Weekly/childViews/WeeklyEdit.vue'),
+          meta: { pagePath: '/home/weekly' }
+        },
+        {
+          path: 'weeklydetail',
+          name: 'weeklydetail',
+          component: () => import(/* webpackChunkName: "weekly" */ './views/Weekly/childViews/WeeklyDetail.vue'),
           meta: { pagePath: '/home/weekly' }
         }
       ]
+    },
+    {
+      path: '/refresh',
+      component: () => import(/* webpackChunkName: "home" */ './views/Refresh.vue'),
+      name: 'Refresh'
     }
   ]
 })

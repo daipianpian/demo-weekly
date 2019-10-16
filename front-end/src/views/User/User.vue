@@ -39,7 +39,11 @@
       <el-table v-loading="!this.reqFlag.search" :data="tableData" header-row-class-name="table-header" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center" width="120"></el-table-column>
         <el-table-column prop="name" label="账号" align="center"></el-table-column>
-        <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
+        <el-table-column prop="email" label="邮箱" align="center">
+          <template slot-scope="scope">
+            <div>{{!scope.row.email ? '暂无邮箱' : scope.row.email}}</div>
+          </template>
+        </el-table-column>
         <el-table-column prop="role" label="身份" align="center"></el-table-column>
         <el-table-column prop="create_time" label="创建时间" align="center"></el-table-column>
         <el-table-column prop="update_time" label="更新时间" align="center"></el-table-column>
@@ -84,7 +88,7 @@
 </template>
 
 <script>
-import { userList, userUpdateState } from '../config/interface'
+import { userList, userUpdateState } from '@/config/interface'
 import Add from '@/components/User/Add'
 import Edit from '@/components/User/Edit'
 export default {

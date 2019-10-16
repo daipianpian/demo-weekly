@@ -24,7 +24,8 @@
           text-color="#fff"
           active-text-color="#1CC09F"
           router>
-          <el-menu-item v-for="item in menuList" :key="item.url" :index="item.url">
+          <el-menu-item v-for="item in menuList" :key="item.url" :index="item.url"
+          @click="handleSelect(item.url)">
             <i :class="item.icon"></i>
             <span slot="title">{{item.name}}</span>
           </el-menu-item>
@@ -43,7 +44,7 @@
 </template>
 
 <script>
-import { userLogout } from '../config/interface'
+import { userLogout } from '@/config/interface'
 export default {
   data () {
     return {
@@ -89,20 +90,23 @@ export default {
             localStorage.clear()
             this.$store.dispatch('saveUserInfo', {})
             this.$common.toast('登出成功', 'success', false)
-            this.$router.push({
-              path: '/',
-              query: {}
-            })
+            this.$router.replace({ path: '/' })
           }
           this.reqFlag.logout = true
         })
+      }
+    },
+    handleSelect (indexPath) {
+      if (indexPath == this.$route.path) {
+        console.log('点击的是当前菜单')
+        this.$common.shallowRefresh(this.$route.name)
       }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .home-wrap{width: 100%; height: 100%;
   .el-header{line-height: 60px; color: $color-white; background: $color-main;
     .logo{font-size: 20px;}

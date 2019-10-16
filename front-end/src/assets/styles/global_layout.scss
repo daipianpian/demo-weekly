@@ -82,7 +82,14 @@ input[type="number"]{
     .el-button{margin: 0 20px;}
   }
 }
-  
+
+/* 红色短竖线 start */
+.v-line-icon{position: relative; padding-left: 9px;
+  &:before{
+    position: absolute; content: ""; width: 4px; height: 18px; left:0; top: 50%; margin-top: -9px; border-radius: 2px; background: #ff4200;
+  }
+}
+/* 红色短竖线 end */
 
 /* 适配 start */
 @media screen and (max-width: 1440px){

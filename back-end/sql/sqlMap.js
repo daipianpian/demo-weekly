@@ -17,7 +17,7 @@ const sqlMap = {
   },
   weekly: {
     // 新增周报
-    add: 'insert into weekly (adminId, startTime, endTime, title, thisWeekWork, nextWeekWork, collaboration, create_time, update_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    add: 'insert into weekly (userId, startTime, endTime, title, thisWeekWork, nextWeekWork, collaboration, create_time, update_time) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     // 更新周报信息
     updateInfo: 'update weekly set startTime = ?, endTime = ?, title = ?, thisWeekWork = ?, nextWeekWork = ?, collaboration = ?, update_time = ? where id = ? and state != 0',
     // 更新周报状态

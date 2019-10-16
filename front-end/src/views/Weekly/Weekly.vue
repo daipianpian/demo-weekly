@@ -46,7 +46,7 @@
       <div class="content-header">
         <el-button type="primary" size="medium" @click="handleAdd">新增周报</el-button>
       </div>
-      <el-table :data="tableData" header-row-class-name="table-header" border style="width: 100%">
+      <el-table v-loading="!this.reqFlag.search" :data="tableData" header-row-class-name="table-header" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center" width="120">
         </el-table-column>
         <el-table-column label="周报名称" align="center">
@@ -80,22 +80,11 @@
         :total="totalCount">
       </el-pagination>
     </div>
-
-    <!-- 新增用户 start -->
-    <Add v-if="showFlag.add" ref="add" @addCallBack="callBackAdd"/>
-    <!-- 新增用户 end -->
-
-    <!-- 编辑用户 start -->
-    <Edit v-if="showFlag.edit" ref="edit" @editCallBack="callBackEdit"/>
-    <!-- 编辑用户 end -->
-
   </div>
 </template>
 
 <script>
-  import { weeklyList, weeklyUpdateState } from '../config/interface'
-import Add from '@/components/Weekly/Add'
-import Edit from '@/components/Weekly/Edit'
+import { weeklyList, weeklyUpdateState } from '@/config/interface'
 export default {
   data () {
     return {
@@ -116,16 +105,8 @@ export default {
       pageSize: this.$store.state.pageSize, // 每页请求多少条
       currentPage: 1, // 初始时在第几页
       totalCount: 0, // 总共多少条数据
-      tableData: [],
-      showFlag: {
-        add: false,
-        edit: false
-      }
+      tableData: []
     }
-  },
-  components: {
-    Add,
-    Edit
   },
   computed: {
     userType: function () {
@@ -178,23 +159,22 @@ export default {
       this.curPage = 1
     },
     handleAdd () {
-      this.showFlag.add = true
-      this.$nextTick(() => {
-        this.$refs.add.init()
-      })
+      this.$router.push({ path: '/home/weeklyadd' })
     },
-    goWeeklyDetails (weeklyId) {
+    goWeeklyDetails (id) {
       this.$router.push({
-        path: '/home/weeklydetails',
+        path: '/home/weeklydetail',
         query: {
-          weeklyId: weeklyId
+          id: id
         }
       })
     },
-    handleEdit (weeklyId) {
-      this.showFlag.edit = true
-      this.$nextTick(() => {
-        this.$refs.edit.init(weeklyId)
+    handleEdit (id) {
+      this.$router.push({
+        path: '/home/weeklyedit',
+        query: {
+          id: id
+        }
       })
     },
     handleDelete (id) {
@@ -232,16 +212,17 @@ export default {
 </script>
 
 <style lang="scss">
-.quill-editor { height: 200px;
-  .ql-container { height: 70%; }
-  .limit { height: 30px; border: 1px solid #ccc; line-height: 30px; text-align: right; }
-  .limit span { color: #ee2a7b; }
-  .ql-snow .ql-editor img { max-width: 480px; }
-  .ql-editor .ql-video { max-width: 480px; }
-}
-
-.week-time{
-  .title{margin-left: 25px;}
-  .line{display: inline-block; width: 26px;}
+.weekly-main-wrap{ padding: 20px;
+  h3{margin: 0;}
+  /* 新增+编辑的周报样式 start */
+  .el-form{width: 80%; max-width: 1000px; min-width: 825px; margin: 30px auto 0;
+    .quill-editor { height: auto; }
+    .quill-editor .ql-container{height: 180px;}
+  }
+  /* 新增+编辑的周报样式 end */
+  /* 周报详情样式 start */
+  .week-work-box{display: block; height: 180px; padding: 5px 15px; line-height: 1.5; font-size: inherit; box-sizing: border-box; border: 1px solid #E4E7ED; border-radius: 4px; resize: vertical; cursor: not-allowed; background-color: #F5F7FA;}
+  .el-input.is-disabled .el-input__inner, .week-work-box{color: #888;}
+  /* 周报详情样式 end */
 }
 </style>
