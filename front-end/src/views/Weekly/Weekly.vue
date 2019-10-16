@@ -15,7 +15,15 @@
         </el-col>
         <el-col v-if="userPower" :span="6">
           <el-form-item label="创建者" prop="userId">
-            <el-input type="number" v-model.number="keywords.userId" placeholder="请输入周报ID"></el-input>
+            <!-- <el-input type="number" v-model.number="keywords.userId" placeholder="请输入周报ID"></el-input> -->
+            <el-select v-model="value" placeholder="请选择">
+              <el-option
+                v-for="item in userList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -84,7 +92,7 @@
 </template>
 
 <script>
-import { weeklyList, weeklyUpdateState } from '@/config/interface'
+import { userList, weeklyList, weeklyUpdateState } from '@/config/interface'
 export default {
   data () {
     return {
@@ -98,9 +106,11 @@ export default {
       searchRules: {
       },
       reqFlag: { // 防止频繁点击，造成连续多次发请求
+        user: true,
         search: true,
         delete: true
       },
+      userList: [],
       pageNum: 1, // 请求第几页
       pageSize: this.$store.state.pageSize, // 每页请求多少条
       currentPage: 1, // 初始时在第几页
@@ -119,9 +129,33 @@ export default {
     }
   },
   created () {
-    this.onSearch()
+    
   },
   methods: {
+    // 初始化
+    init () {
+      this.queryUserList()
+      this.onSearch()
+    },
+    queryUserList () {
+      const url = userList
+      if (this.reqFlag.user) {
+        this.reqFlag.user = false
+        let params = {
+          userType: this.userType,
+          pageNum: 1,
+          pageSize: 20
+        }
+        this.$http(url, params)
+        .then(res => {
+          if (res.code == 1) {
+            let data = res.data
+            this.userList = data.list
+          }
+          this.reqFlag.user = true
+        })
+      }
+    },
     onSearch () {
       const url = weeklyList
       if (this.reqFlag.search) {
