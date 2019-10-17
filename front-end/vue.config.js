@@ -20,7 +20,7 @@ module.exports = {
         modules: false
     },
     devServer:{
-        port:8080,
+        port:8002,
         open:true,
         https:false,
         overlay: {
