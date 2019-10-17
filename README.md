@@ -1,5 +1,5 @@
 # demo-weekly
-vue+nodeJs+mySql实现的工作周报后台管理系统
+VUE+nodeJs+mySql实现的工作周报后台管理系统
 
 ## 源码位置
 1. 前端vue源码--front-end
