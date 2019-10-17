@@ -4,7 +4,7 @@
     <el-header class="flex">
       <div class="logo flex-item"><i class="el-icon-date"></i> 工作周报</div>
       <div class="user-info">
-        <el-dropdown trigger="click" @command="handleCommand">
+        <el-dropdown @command="handleCommand">
           <el-button type="primary">
             <i class="el-icon-user-solid el-icon--left"></i>{{userInfo.name}}
           </el-button>

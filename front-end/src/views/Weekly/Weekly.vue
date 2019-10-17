@@ -15,7 +15,7 @@
         </el-col>
         <el-col v-if="userPower" :span="6">
           <el-form-item label="创建者" prop="userId">
-            <el-select v-model="keywords.userId" placeholder="请选择">
+            <el-select v-model="keywords.userId" filterable remote reserve-keyword placeholder="请选择创建者" :remote-method="queryUserList">
               <el-option
                 v-for="item in userList"
                 :key="item.id"
@@ -133,15 +133,16 @@ export default {
   methods: {
     // 初始化
     init () {
-      this.queryUserList()
+      this.queryUserList('')
       this.onSearch()
     },
-    queryUserList () {
+    queryUserList (userName) {
       const url = userList
       if (this.reqFlag.user) {
         this.reqFlag.user = false
         let params = {
           userType: this.userType,
+          searchName: !userName ? null : userName,
           pageNum: 1,
           pageSize: 20
         }
@@ -151,7 +152,7 @@ export default {
             let data = res.data
             let list = data.list
             let objList = []
-            if (list.length > 1) {
+            if (list.length > 0) {
               for (let value of list) {
                 let obj = {
                   id: value.id,
