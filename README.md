@@ -27,5 +27,6 @@ VUE+nodeJs+mySql实现的工作周报后台管理系统
    npm run serve
 3. 打包
    npm run build
-   
+
+本人前端程序员，长期混迹于各种前端开发中，现在专门为前端热爱者建了个微信群，和大家一起分享自己在工作、学习中遇到的技术知识或问题，还有各种资料和课程，各位感兴趣的可以加入哦~ 
 ![微信前端交流群](http://daipianpian.com/common/images/weChatGroup.jpg)
