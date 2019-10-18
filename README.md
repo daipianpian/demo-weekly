@@ -1,5 +1,5 @@
 # demo-weekly
-VUE+nodeJs+mySql实现的工作周报后台管理系统
+Vue+nodeJs+mySql实现的工作周报后台管理系统
 
 
 ## 源码位置
