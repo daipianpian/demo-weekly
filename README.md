@@ -28,4 +28,4 @@ VUE+nodeJs+mySql实现的工作周报后台管理系统
 3. 打包
    npm run build
    
-![Image text](http://daipianpian.com/common/images/weChatGroup.jpg)
+![微信前端交流群](http://daipianpian.com/common/images/weChatGroup.jpg)
