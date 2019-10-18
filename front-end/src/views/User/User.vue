@@ -36,7 +36,7 @@
       <div v-if="userPower" class="content-header">
         <el-button type="primary" size="medium" @click="handleAdd">新增管理员</el-button>
       </div>
-      <el-table v-loading="!this.reqFlag.search" :data="tableData" header-row-class-name="table-header" border style="width: 100%">
+      <el-table v-loading="!this.reqFlag.search" :data="tableData" header-row-class-name="table-header" border>
         <el-table-column prop="id" label="ID" align="center" width="120"></el-table-column>
         <el-table-column prop="name" label="账号" align="center"></el-table-column>
         <el-table-column prop="email" label="邮箱" align="center">
@@ -47,7 +47,7 @@
         <el-table-column prop="role" label="身份" align="center"></el-table-column>
         <el-table-column prop="create_time" label="创建时间" align="center"></el-table-column>
         <el-table-column prop="update_time" label="更新时间" align="center"></el-table-column>
-        <el-table-column v-if="userPower" prop="state" label="状态" align="center">
+        <el-table-column v-if="userPower" label="状态" align="center">
           <template slot-scope="scope">
             <el-select size="medium" class="state-select" :class="{'text-danger': scope.row.state==2}" v-model="scope.row.state" :disabled="scope.row.type==1" placeholder="请选择" @change="updateState(scope.row.id,scope.row.state)">
               <el-option

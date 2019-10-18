@@ -136,13 +136,13 @@ export default {
             this.reqFlag.edit = false
 
             let title = this.formData.title
-            console.log('formData.title==' + title)
+            // console.log('formData.title==' + title)
 
             let yearNum = this.$moment(title).year()
-            console.log('yearNum==' + yearNum)
+            // console.log('yearNum==' + yearNum)
 
             let weekNum = this.$moment(title).week()
-            console.log('weekNum==' + weekNum)
+            // console.log('weekNum==' + weekNum)
 
             let params = {
               id: this.id,

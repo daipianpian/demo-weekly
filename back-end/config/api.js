@@ -1,4 +1,4 @@
-let path = '/week/api';
+let path = '/dome/week/api';
 
 module.exports = {
     // user-用户管理

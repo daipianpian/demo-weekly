@@ -70,11 +70,6 @@ const commonFn = {
 				})
 				break
 		}
-	},
-	// 去除两端的空白
-	trim (text) {
-		const rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g
-		return text == null ? null : (text + '').replace(rtrim, '')
 	}
 }
 
