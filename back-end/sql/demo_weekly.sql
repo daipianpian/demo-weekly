@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.7.3
 -- https://www.phpmyadmin.net/
 --
--- 主机： localhost
--- 生成日期： 2019-10-23 05:45:41
--- 服务器版本： 8.0.17
--- PHP 版本： 7.3.7
+-- Host: localhost
+-- Generation Time: 2019-10-23 14:26:30
+-- 服务器版本： 5.6.36-log
+-- PHP Version: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 数据库： `demo_weekly`
+-- Database: `demo_weekly`
 --
 
 -- --------------------------------------------------------
@@ -30,13 +30,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `user` (
   `id` int(30) NOT NULL COMMENT '用户id',
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '用户名称',
-  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '用户密码',
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '用户邮箱',
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT '用户名称',
+  `password` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT '用户密码',
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '用户邮箱',
   `type` int(10) NOT NULL DEFAULT '2' COMMENT '用户类型',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `state` char(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '状态'
+  `state` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `password`, `email`, `type`, `create_time`, `update_time`, `state`) VALUES
-(1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '1195997183@qq.com', 1, '2018-06-27 09:54:44', '2018-06-27 15:54:44', '1'),
+(1, 'admin', 'de06091877ea209cff3c4b4a28194c8e', '1195997183@qq.com', 1, '2018-06-27 09:54:44', '2018-06-27 15:54:44', '1'),
 (2, 'test1', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-09-24 08:00:00', '2019-10-14 16:59:07', '0'),
 (3, 'test2', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-09-24 09:00:00', '2019-10-15 14:22:02', '2'),
 (4, 'test3', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2018-10-09 09:54:44', '2019-10-10 09:10:20', '1'),
@@ -56,9 +56,7 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`, `type`, `create_time`, `u
 (33, 'test9', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-14 10:09:56', '2019-10-14 10:09:56', '1'),
 (35, 'test10', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-14 10:11:11', '2019-10-15 14:25:03', '0'),
 (36, 'test12', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-15 15:16:36', '2019-10-15 15:46:24', '1'),
-(37, 'test14', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-15 15:17:39', '2019-10-15 15:37:21', '1'),
-(38, 'test15', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-22 17:02:18', '2019-10-22 17:02:18', '1'),
-(39, 'test16', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-22 17:02:29', '2019-10-22 17:02:29', '1');
+(37, 'test14', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-15 15:17:39', '2019-10-15 15:37:21', '1');
 
 -- --------------------------------------------------------
 
@@ -71,13 +69,13 @@ CREATE TABLE `weekly` (
   `userId` int(30) NOT NULL COMMENT '创建者id',
   `startTime` date NOT NULL COMMENT '这周开始时间',
   `endTime` date NOT NULL COMMENT '这周结束时间',
-  `title` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '今年的第几周',
-  `thisWeekWork` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '这周完成工作',
-  `nextWeekWork` text CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT '下周工作计划',
-  `collaboration` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '需协调与帮助',
+  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT '今年的第几周',
+  `thisWeekWork` text COLLATE utf8_unicode_ci NOT NULL COMMENT '这周完成工作',
+  `nextWeekWork` text COLLATE utf8_unicode_ci COMMENT '下周工作计划',
+  `collaboration` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '需协调与帮助',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  `state` char(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '状态'
+  `state` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='周报表';
 
 --
@@ -99,22 +97,21 @@ INSERT INTO `weekly` (`id`, `userId`, `startTime`, `endTime`, `title`, `thisWeek
 (23, 1, '2019-09-22', '2019-09-28', '2019 第 39 周', '<p>11</p>', '<p>33</p>', NULL, '2019-10-16 10:29:02', '2019-10-18 16:16:58', '1'),
 (24, 1, '2019-09-29', '2019-10-05', '2019 第 40 周', '<p>eee</p>', '<p>ggg</p>', NULL, '2019-10-16 12:08:10', '2019-10-18 16:16:44', '1'),
 (25, 1, '2019-10-06', '2019-10-12', '2019 第 41 周', '<p>rrr</p>', '<p>ggg</p>', NULL, '2019-10-16 12:08:38', '2019-10-18 16:16:37', '1'),
-(26, 1, '2019-10-13', '2019-10-19', '2019 第 42 周', '<p>逛逛</p>', '<p>看看</p>', NULL, '2019-10-16 12:09:16', '2019-10-18 16:16:25', '1'),
-(27, 1, '2019-10-20', '2019-10-26', '2019 第 43 周', '<p>测试</p>', '<p>测试</p>', NULL, '2019-10-23 10:28:34', '2019-10-23 10:28:34', '1');
+(26, 1, '2019-10-13', '2019-10-19', '2019 第 42 周', '<p>逛逛</p>', '<p>看看</p>', NULL, '2019-10-16 12:09:16', '2019-10-18 16:16:25', '1');
 
 --
--- 转储表的索引
+-- Indexes for dumped tables
 --
 
 --
--- 表的索引 `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- 表的索引 `weekly`
+-- Indexes for table `weekly`
 --
 ALTER TABLE `weekly`
   ADD PRIMARY KEY (`id`);
@@ -127,14 +124,12 @@ ALTER TABLE `weekly`
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '用户id', AUTO_INCREMENT=40;
-
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '用户id', AUTO_INCREMENT=38;
 --
 -- 使用表AUTO_INCREMENT `weekly`
 --
 ALTER TABLE `weekly`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '周报id', AUTO_INCREMENT=28;
-COMMIT;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '周报id', AUTO_INCREMENT=27;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
