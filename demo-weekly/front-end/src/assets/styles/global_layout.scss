@@ -1,0 +1,118 @@
+@charset "UTF-8";
+
+/* 去掉input尾部上下小箭头 start */
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -o-appearance: none !important;
+  -ms-appearance: none !important;
+  appearance: none !important;
+  margin: 0;
+}
+input[type="number"]{
+  -webkit-appearance:textfield;
+  -moz-appearance:textfield;
+  -o-appearance:textfield;
+  -ms-appearance:textfield;
+  appearance:textfield;
+}
+/* 去掉input尾部上下小箭头 end */
+
+.el-form .line{text-align: center;}
+
+.float-left {float:left;}
+.float-right {float:right;}
+.clearfix{ overflow: hidden; zoom: 1; }
+
+
+.flex{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-o-box;display:-webkit-flex;display:flex}
+.flex-item{-webkit-box-flex:1;-moz-box-flex:1;-ms-flex:1;-webkit-flex:1;flex:1}
+.flex-center-center{display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-o-box;display:box;display:-webkit-flex;display:flex;-webkit-justify-content:center;-moz-justify-content:center;-ms-justify-content:center;-o-justify-content:center;justify-content:center;-webkit-align-items:center;-moz-align-items:center;-ms-align-items:center;-o-align-items:center;align-items:center}
+.sub-center-center{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-moz-transform:translate(-50%,-50%);-o-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+.sub-h-center{position:absolute;left:50%;-webkit-transform:translate(-50%,0%);-moz-transform:translate(-50%,0%);-o-transform:translate(-50%,0%);-ms-transform:translate(-50%,0%);transform:translate(-50%,0%)}
+.sub-v-center{position:absolute;top:50%;-webkit-transform:translate(0%,-50%);-moz-transform:translate(0%,-50%);-o-transform:translate(0%,-50%);-ms-transform:translate(0%,-50%);transform:translate(0%,-50%)}
+
+.text-main{color: $color-main;}
+.text-success{color: $color-success;}
+.text-warning{color: $color-warning;}
+.text-danger{color: $color-danger;}
+.text-info{color: $color-info;}
+
+.bg-main{color: $color-main;}
+.bg-success{color:#ffffff; background: $color-success;}
+.bg-warning{color:#ffffff; background: $color-warning;}
+.bg-danger{color:#ffffff; background: $color-danger;}
+.bg-info{color:#ffffff; background: $color-info;}
+
+/* Dialog 对话框-底部按钮样式重置 start */
+.el-message-box__btns{overflow: hidden; zoom: 1;}
+.messagebox-cancel-button{float: right;}
+.el-message-box__btns button:nth-child(2){margin-right: 10px;}
+/* Dialog 对话框-底部按钮样式重置 end */
+
+/* 右边主框样式 */
+/* 布局 start */
+.home-wrap{position: relative;
+  .el-header{position:fixed;width:100%;height:60px; left:0; top:0; z-index:1000}     
+}
+
+.container-wrap{margin-top: 60px; overflow:auto;
+  .aside-wrap{position:fixed; width: 200px; height: 100%; z-index: 100;
+    .el-menu{height: 100%;}
+  }
+  .main-wrap{margin-left: 200px;padding: 0;}
+}
+
+.main-wrap{min-width: 987px;}
+.table-header th{background: $color-bg;}
+.main-search{
+  padding: 20px 20px 0;
+  .el-input,.el-select{width:200px;}
+}
+
+.main-content{
+  padding: 20px 20px 40px;
+  .content-header{margin-bottom: 20px;}
+}
+/* 布局 end */
+
+.hr-10{width: 100%; height: 10px; background: $color-bg;}
+
+/* Pagination 分页 */
+.el-pagination{text-align: right; margin-top: 10px;}
+
+/* 按钮 */
+.el-button--danger.is-plain:focus{color: #F56C6C;background: #fef0f0;border-color: #fbc4c4;}
+
+/* 新增或者编辑的对话框样式 */
+.el-dialog{
+  width: 800px;
+  &.dialog-medium{width: 700px;}
+  &.dialog-small{width: 600px;}
+  &.dialog-mini{width: 500px;}
+  .el-input,.el-select{width:100%;}
+  .dialog-footer{
+    .el-button{margin: 0 20px;}
+  }
+}
+
+/* 红色短竖线 start */
+.v-line-icon{position: relative; padding-left: 9px;
+  &:before{
+    position: absolute; content: ""; width: 4px; height: 18px; left:0; top: 50%; margin-top: -9px; border-radius: 2px; background: #ff4200;
+  }
+}
+/* 红色短竖线 end */
+
+/* 适配 start */
+@media screen and (max-width: 1440px){
+  .main-search{
+    .el-input,.el-select{width:180px;}
+  }
+}
+
+@media screen and (max-width: 1360px){
+  .main-search{
+    .el-input,.el-select{width:160px;}
+  }
+}
