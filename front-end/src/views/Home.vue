@@ -15,9 +15,9 @@
       </div>
     </el-header>
     <!-- header end -->
-    <el-container>
+    <div class="container-wrap">
       <!-- aside-nav start -->
-      <el-aside width="200px">
+      <div class="aside-wrap">
         <el-menu
           :default-active="activePath"
           background-color="#283643"
@@ -30,16 +30,16 @@
             <span slot="title">{{item.name}}</span>
           </el-menu-item>
         </el-menu>
-      </el-aside>
+      </div>
       <!-- aside-nav end -->
 
       <!-- main start -->
-      <el-main>
+      <div class="main-wrap">
         <router-view/>
-      </el-main>
+      </div>
       <!-- main end -->
 
-    </el-container>
+    </div>
   </el-container>
 </template>
 

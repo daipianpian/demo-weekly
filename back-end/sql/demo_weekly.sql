@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2019-10-19 03:15:29
+-- 生成日期： 2019-10-23 05:45:41
 -- 服务器版本： 8.0.17
 -- PHP 版本： 7.3.7
 
@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `user` (
-  `id` int(30) NOT NULL COMMENT '管理员id',
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '管理员名称',
-  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '管理员密码',
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '管理员邮箱',
+  `id` int(30) NOT NULL COMMENT '用户id',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '用户名称',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '用户密码',
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '用户邮箱',
   `type` int(10) NOT NULL DEFAULT '2' COMMENT '用户类型',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
@@ -56,7 +56,9 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`, `type`, `create_time`, `u
 (33, 'test9', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-14 10:09:56', '2019-10-14 10:09:56', '1'),
 (35, 'test10', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-14 10:11:11', '2019-10-15 14:25:03', '0'),
 (36, 'test12', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-15 15:16:36', '2019-10-15 15:46:24', '1'),
-(37, 'test14', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-15 15:17:39', '2019-10-15 15:37:21', '1');
+(37, 'test14', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-15 15:17:39', '2019-10-15 15:37:21', '1'),
+(38, 'test15', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-22 17:02:18', '2019-10-22 17:02:18', '1'),
+(39, 'test16', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-22 17:02:29', '2019-10-22 17:02:29', '1');
 
 -- --------------------------------------------------------
 
@@ -97,7 +99,8 @@ INSERT INTO `weekly` (`id`, `userId`, `startTime`, `endTime`, `title`, `thisWeek
 (23, 1, '2019-09-22', '2019-09-28', '2019 第 39 周', '<p>11</p>', '<p>33</p>', NULL, '2019-10-16 10:29:02', '2019-10-18 16:16:58', '1'),
 (24, 1, '2019-09-29', '2019-10-05', '2019 第 40 周', '<p>eee</p>', '<p>ggg</p>', NULL, '2019-10-16 12:08:10', '2019-10-18 16:16:44', '1'),
 (25, 1, '2019-10-06', '2019-10-12', '2019 第 41 周', '<p>rrr</p>', '<p>ggg</p>', NULL, '2019-10-16 12:08:38', '2019-10-18 16:16:37', '1'),
-(26, 1, '2019-10-13', '2019-10-19', '2019 第 42 周', '<p>逛逛</p>', '<p>看看</p>', NULL, '2019-10-16 12:09:16', '2019-10-18 16:16:25', '1');
+(26, 1, '2019-10-13', '2019-10-19', '2019 第 42 周', '<p>逛逛</p>', '<p>看看</p>', NULL, '2019-10-16 12:09:16', '2019-10-18 16:16:25', '1'),
+(27, 1, '2019-10-20', '2019-10-26', '2019 第 43 周', '<p>测试</p>', '<p>测试</p>', NULL, '2019-10-23 10:28:34', '2019-10-23 10:28:34', '1');
 
 --
 -- 转储表的索引
@@ -124,13 +127,13 @@ ALTER TABLE `weekly`
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '管理员id', AUTO_INCREMENT=38;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '用户id', AUTO_INCREMENT=40;
 
 --
 -- 使用表AUTO_INCREMENT `weekly`
 --
 ALTER TABLE `weekly`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '周报id', AUTO_INCREMENT=27;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '周报id', AUTO_INCREMENT=28;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

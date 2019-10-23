@@ -17,7 +17,9 @@ Vue+nodeJs+mySql实现的工作周报后台管理系统
 ### 启动后台
 1. 安装依赖
    npm install
-2. 运行
+2. 修改db.js数据库配置
+   修改back-end/config/db.js文件里的mySql数据库配置
+3. 运行
    nodemon index.js
 
 ### 启动前端

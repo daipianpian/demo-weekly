@@ -51,10 +51,20 @@ input[type="number"]{
 /* Dialog 对话框-底部按钮样式重置 end */
 
 /* 右边主框样式 */
-.hr-10{width: 100%; height: 10px; background: $color-bg;}
-.el-main{min-width: 970px;}
+/* 布局 start */
+.home-wrap{position: relative;
+  .el-header{position:fixed;width:100%;height:60px; left:0; top:0; z-index:1000}     
+}
+
+.container-wrap{margin-top: 60px; overflow:auto;
+  .aside-wrap{position:fixed; width: 200px; height: 100%; z-index: 100;
+    .el-menu{height: 100%;}
+  }
+  .main-wrap{margin-left: 200px;padding: 0;}
+}
+
+.main-wrap{min-width: 987px;}
 .table-header th{background: $color-bg;}
-.el-main{padding: 0;}
 .main-search{
   padding: 20px 20px 0;
   .el-input,.el-select{width:200px;}
@@ -63,8 +73,10 @@ input[type="number"]{
 .main-content{
   padding: 20px 20px 40px;
   .content-header{margin-bottom: 20px;}
-  .el-table{}
 }
+/* 布局 end */
+
+.hr-10{width: 100%; height: 10px; background: $color-bg;}
 
 /* Pagination 分页 */
 .el-pagination{text-align: right; margin-top: 10px;}

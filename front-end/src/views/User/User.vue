@@ -39,15 +39,11 @@
       <el-table v-loading="!this.reqFlag.search" :data="tableData" header-row-class-name="table-header" border>
         <el-table-column prop="id" label="ID" align="center" width="120"></el-table-column>
         <el-table-column prop="name" label="账号" align="center"></el-table-column>
-        <el-table-column prop="email" label="邮箱" align="center">
-          <template slot-scope="scope">
-            <div>{{!scope.row.email ? '暂无邮箱' : scope.row.email}}</div>
-          </template>
-        </el-table-column>
+        <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
         <el-table-column prop="role" label="身份" align="center"></el-table-column>
         <el-table-column prop="create_time" label="创建时间" align="center"></el-table-column>
         <el-table-column prop="update_time" label="更新时间" align="center"></el-table-column>
-        <!-- <el-table-column v-if="userPower" label="状态" align="center">
+        <el-table-column v-if="userPower" label="状态" align="center">
           <template slot-scope="scope">
             <el-select size="mini" class="state-select" :class="{'text-danger': scope.row.state==2}" v-model="scope.row.state" :disabled="scope.row.type==1" placeholder="请选择" @change="updateState(scope.row.id,scope.row.state)">
               <el-option
@@ -58,13 +54,13 @@
               </el-option>
             </el-select>
           </template>
-        </el-table-column> -->
-        <!-- <el-table-column label="操作" align="center" width="200">
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button :disabled="scope.row.type==1" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
             <el-button v-if="userPower" :disabled="scope.row.type==1" size="mini" type="danger" plain @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
 
       <el-pagination
@@ -241,7 +237,7 @@ export default {
 </script>
 
 <style lang="scss">
-.user-wrap{
+.user-wrap{/* height: 1800px; background: pink; */
   .el-table{
     .el-select{width: 76px;}
     .el-input__inner{color: inherit;}
