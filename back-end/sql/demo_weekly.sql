@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019-10-23 14:26:30
+-- Generation Time: 2019-10-23 14:31:40
 -- 服务器版本： 5.6.36-log
 -- PHP Version: 5.6.31
 
@@ -45,7 +45,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `name`, `password`, `email`, `type`, `create_time`, `update_time`, `state`) VALUES
 (1, 'admin', 'de06091877ea209cff3c4b4a28194c8e', '1195997183@qq.com', 1, '2018-06-27 09:54:44', '2018-06-27 15:54:44', '1'),
-(2, 'test1', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-09-24 08:00:00', '2019-10-14 16:59:07', '0'),
+(2, 'test1', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-09-24 08:00:00', '2019-10-14 16:59:07', '1'),
 (3, 'test2', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-09-24 09:00:00', '2019-10-15 14:22:02', '2'),
 (4, 'test3', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2018-10-09 09:54:44', '2019-10-10 09:10:20', '1'),
 (5, 'test4', 'e10adc3949ba59abbe56e057f20f883e', NULL, 2, '2019-10-10 09:12:18', '2019-10-14 16:58:42', '1'),
