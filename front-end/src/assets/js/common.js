@@ -13,7 +13,6 @@ const commonFn = {
 			type: type,
 			duration: time,
 			onClose: onCloseFn
-
 		})
 	},
 	// 刷新当前页面
@@ -30,7 +29,7 @@ const commonFn = {
 	msgBox (type, title, message, confirm, cancel) {
 		switch (type) {
 			case 'alert':
-				MessageBox.$alert(message, title, {
+				MessageBox.alert(message, title, {
 						dangerouslyUseHTMLString: true
 					})
 					.then(() => {
@@ -41,7 +40,7 @@ const commonFn = {
 					})
 				break
 			case 'confirm':
-				MessageBox.$confirm(message, title, {
+				MessageBox.confirm(message, title, {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					cancelButtonClass: 'messagebox-cancel-button',
@@ -49,9 +48,9 @@ const commonFn = {
 					type: 'warning'
 				}).then(() => {
 					if (!confirm) {
-						MessageBox.$message({
-							type: 'success',
+						Message({
 							message: title + '失败!',
+							type: 'success',
 							duration: 1500
 						})
 					} else {
@@ -59,9 +58,9 @@ const commonFn = {
 					}
 				}).catch(() => {
 					if (!cancel) {
-						MessageBox.$message({
-							type: 'info',
+						Message({
 							message: '已取消' + title,
+							type: 'info',
 							duration: 1500
 						})
 					} else {

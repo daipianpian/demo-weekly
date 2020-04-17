@@ -1,5 +1,5 @@
 // node 后端服务器
-const router = require('./routes/router');
+const router = require('./routes/router'); // 接口地址管理
 const path = require('path');
 const bodyParser = require('body-parser');
 const express = require('express');

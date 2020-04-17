@@ -4,7 +4,7 @@ import router from '../router'
 import common from '../assets/js/common.js'
 
 axios.defaults.timeout = 180000
-axios.defaults.baseURL = '/demo-weekly/back-end/api' // 接口域名
+axios.defaults.baseURL = '/demo-weekly/back-end/api' // 测试接口域名
 export const baseURL = axios.defaults.baseURL
 
 axios.interceptors.request.use((config) => {

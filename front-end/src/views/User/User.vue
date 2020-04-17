@@ -95,6 +95,7 @@ export default {
         name: null,
         email: null
       },
+      keywordsParams: {}, // 搜索请求是的搜索入参
       searchRules: {
       },
       reqFlag: { // 防止频繁点击，造成连续多次发请求
@@ -135,17 +136,18 @@ export default {
     }
   },
   created () {
-    this.onSearch()
+    this.keywordsParams = JSON.parse(JSON.stringify(this.keywords))
+    this.queryUserList()
   },
   methods: {
-    onSearch () {
+    queryUserList () {
       const url = userList
       if (this.reqFlag.search) {
         this.reqFlag.search = false
         let params = {
-          searchId: this.keywords.id,
-          searchName: this.keywords.name,
-          searchEmail: this.keywords.email,
+          searchId: this.keywordsParams.id,
+          searchName: this.keywordsParams.name,
+          searchEmail: this.keywordsParams.email,
           userType: this.userType,
           pageNum: this.pageNum,
           pageSize: this.pageSize
@@ -162,14 +164,20 @@ export default {
         })
       }
     },
+    onSearch () {
+      this.pageNum = 1
+      this.keywordsParams = JSON.parse(JSON.stringify(this.keywords))
+      this.queryUserList()
+    },
     handleCurrentChange (val) {
       this.pageNum = val
-      this.onSearch()
+      this.queryUserList()
     },
     onReset (formName) {
       this.$refs[formName].resetFields()
       this.pageNum = 1
-      this.onSearch()
+      this.keywordsParams = JSON.parse(JSON.stringify(this.keywords))
+      this.queryUserList()
       this.curPage = 1
     },
     handleAdd () {
@@ -196,7 +204,7 @@ export default {
           .then(res => {
             if (res.code == 1) {
               this.$common.toast('删除成功', 'success', false)
-              this.onSearch()
+              this.queryUserList()
             }
             this.reqFlag.delete = true
           })
@@ -215,7 +223,7 @@ export default {
         .then(res => {
           if (res.code == 1) {
             this.$common.toast('修改成功', 'success', false)
-            this.onSearch()
+            this.queryUserList()
           }
           this.reqFlag.state = true
         })
@@ -225,12 +233,12 @@ export default {
     callBackAdd () {
       this.onReset('keywords')
       this.pageNum = 1
-      this.onSearch()
+      this.queryUserList()
       this.curPage = 1
     },
     // 编辑管理员子组件回调
     callBackEdit () {
-      this.onSearch()
+      this.queryUserList()
     }
   }
 }

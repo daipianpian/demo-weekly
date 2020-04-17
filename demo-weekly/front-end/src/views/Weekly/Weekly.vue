@@ -102,6 +102,7 @@ export default {
         startTime: null,
         endTime: null
       },
+      keywordsParams: {}, // 搜索请求是的搜索入参
       searchRules: {
       },
       reqFlag: { // 防止频繁点击，造成连续多次发请求
@@ -134,7 +135,8 @@ export default {
     // 初始化
     init () {
       this.queryUserList('')
-      this.onSearch()
+      this.keywordsParams = JSON.parse(JSON.stringify(this.keywords))
+      this.queryWeeklyList()
     },
     queryUserList (userName) {
       const url = userList
@@ -168,16 +170,16 @@ export default {
         })
       }
     },
-    onSearch () {
+    queryWeeklyList () {
       const url = weeklyList
       if (this.reqFlag.search) {
         this.reqFlag.search = false
         let params = {
-          searchId: this.keywords.id,
-          searchTitle: this.keywords.title,
-          searchUserId: this.keywords.userId,
-          searchStartTime: this.keywords.startTime,
-          searchEndTime: this.keywords.endTime,
+          searchId: this.keywordsParams.id,
+          searchTitle: this.keywordsParams.title,
+          searchUserId: this.keywordsParams.userId,
+          searchStartTime: this.keywordsParams.startTime,
+          searchEndTime: this.keywordsParams.endTime,
           userType: this.userType,
           pageNum: this.pageNum,
           pageSize: this.pageSize
@@ -194,14 +196,20 @@ export default {
         })
       }
     },
+    onSearch () {
+      this.pageNum = 1
+      this.keywordsParams = JSON.parse(JSON.stringify(this.keywords))
+      this.queryWeeklyList()
+    },
     handleCurrentChange (val) {
       this.pageNum = val
-      this.onSearch()
+      this.queryWeeklyList()
     },
     onReset (formName) {
       this.$refs[formName].resetFields()
       this.pageNum = 1
-      this.onSearch()
+       this.keywordsParams = JSON.parse(JSON.stringify(this.keywords))
+      this.queryWeeklyList()
       this.curPage = 1
     },
     handleAdd () {
@@ -235,7 +243,7 @@ export default {
           .then(res => {
             if (res.code == 1) {
               this.$common.toast('删除成功', 'success', false)
-              this.onSearch()
+              this.queryWeeklyList()
             }
             this.reqFlag.delete = true
           })
@@ -246,12 +254,12 @@ export default {
     callBackAdd () {
       this.onReset('keywords')
       this.pageNum = 1
-      this.onSearch()
+      this.queryWeeklyList()
       this.curPage = 1
     },
     // 编辑管理员子组件回调
     callBackEdit () {
-      this.onSearch()
+      this.queryWeeklyList()
     }
   }
 }
