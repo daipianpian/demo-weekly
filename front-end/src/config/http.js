@@ -4,7 +4,10 @@ import router from '../router'
 import common from '../assets/js/common.js'
 
 axios.defaults.timeout = 180000
-axios.defaults.baseURL = '/demo-weekly/back-end/api' // 测试接口域名
+
+// axios.defaults.baseURL = process.env.VUE_APP_FLAG == 'production' ? 'http://demo.weekly.api.daipianpian.com/demo-weekly/back-end/api' : 'http://weekly.api.local.com/demo-weekly/back-end/api'
+
+axios.defaults.baseURL = 'http://demo.weekly.api.daipianpian.com/demo-weekly/back-end/api'
 export const baseURL = axios.defaults.baseURL
 
 axios.interceptors.request.use((config) => {
