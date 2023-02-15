@@ -49,6 +49,20 @@
 import { weeklyDetail, weeklyUpdateInfo } from '@/config/interface'
 import { quillEditor } from 'vue-quill-editor'
 export default {
+  // 配置title和meta数据
+  metaInfo: {
+    title: '周报编辑',
+    meta: [
+      {
+        name: 'keywords',
+        content: '周报编辑,管理系统,周报'
+      },
+      {
+        name: 'description',
+        content: '这是一段网页的描述-周报编辑'
+      }
+    ]
+  },
   data () {
     return {
       id: null, // 周报id

@@ -88,6 +88,20 @@ import { userList, userUpdateState } from '@/config/interface'
 import Add from '@/components/User/Add'
 import Edit from '@/components/User/Edit'
 export default {
+  // 配置title和meta数据
+  metaInfo: {
+    title: '用户管理',
+    meta: [
+      {
+        name: 'keywords',
+        content: '用户,管理系统,周报'
+      },
+      {
+        name: 'description',
+        content: '这是一段网页的描述-用户管理'
+      }
+    ]
+  },
   data () {
     return {
       keywords: {

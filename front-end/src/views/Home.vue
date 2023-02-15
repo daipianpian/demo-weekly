@@ -46,6 +46,20 @@
 <script>
 import { userLogout } from '@/config/interface'
 export default {
+  // 配置title和meta数据
+  metaInfo: {
+    title: '主页',
+    meta: [
+      {
+        name: 'keywords',
+        content: '主页,管理系统,周报'
+      },
+      {
+        name: 'description',
+        content: '这是一段网页的描述-主页'
+      }
+    ]
+  },
   data () {
     return {
       menuList: this.$store.state.menuList,

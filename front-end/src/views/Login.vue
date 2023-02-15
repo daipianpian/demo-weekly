@@ -19,6 +19,20 @@
 <script>
 import { userLogin } from '@/config/interface'
 export default {
+  // 配置title和meta数据
+  metaInfo: {
+    title: '登录',
+    meta: [
+      {
+        name: 'keywords',
+        content: 'vue,管理系统,周报'
+      },
+      {
+        name: 'description',
+        content: '这是一段网页的描述-登录'
+      }
+    ]
+  },
   data () {
     const validate = (rule, value, callback) => {
       const reg = /^[0-9a-zA-Z]*$/g
